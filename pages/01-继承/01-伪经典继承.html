@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>伪经典继承</title>
+</head>
+<body>
+  伪经典继承
+  <script>
+    // es5
+    function Parent(name,age){
+      this.name = name;
+      this.age = age;
+      // console.log('parent 日志');
+      this.hobbit = 'basketball'
+    }
+
+    Parent.prototype.speak = function(){
+      console.log('name:'+this.name+'--age:'+this.age,this.hobbit);
+    }
+
+    function Child(name,age,addr){
+      //构造函数继承
+      Parent.call(this,name,age);
+      this.addr = addr;
+    }
+    
+    // es5原型链继承
+    // es5 方法一：该方法唯一缺点是需要创建一个新对象，然后把旧对象抛弃掉，不能直接修改已有的默认对象。
+    //            默认的对象为Child.prototype
+    // Child.prototype = Object.create(Parent.prototype);
+
+    // es5 方法二：如果函数Parent有一些副作用（比如写日志、修改状态、注册到其他对象、给this添加数据属性等）
+    // 就会影响到Parent的“后代”。
+    Child.prototype = new Parent();
+
+    // ----------------------------------------------------------------------------------
+    // es6原型链继承
+    // 直接修改现有的Child.prototype  
+    // Object.setPrototypeOf(Child.prototype, Parent.prototype);
+    
+    Child.prototype.show = function(){
+      console.log('name:'+this.name+'--age:'+this.age+'--addr:'+this.addr,this.hobbit)
+    }
+   
+
+    var parent = new Parent('p1',50);
+    var child = new Child('c1',20,'bdsoft');
+    parent.hobbit = 'football';
+
+    parent.speak();
+    child.speak();
+    child.show();
+
+    // es6
+    class P{
+      constructor(name,age){
+        this.name = name;
+        this.age =age;
+      }
+
+      show(){
+        console.log(`name:${this.name}--age:${this.age}`)
+      }
+    }
+
+    class C extends P{
+      constructor(name,age,addr){
+        super(name,age);
+        this.addr = addr
+      }
+      show(){
+        console.log(`name:${this.name}--age:${this.age}--addr:${this.addr}`)
+      }
+    }
+
+    let p1 = new P('es6P',50),
+        c1 = new C('es6C',20,'bdsoft');
+
+    p1.show();
+    c1.show();
+
+  </script>
+</body>
+</html>
