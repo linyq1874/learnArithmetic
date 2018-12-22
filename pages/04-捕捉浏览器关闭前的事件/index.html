@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		var item = +localStorage.getItem('count') || 0;
+		console.log(item);
+		console.log(typeof item);
+		// document.title = 'test';
+		document.addEventListener('visibilitychange', function () {
+		  // 用户离开了当前页面
+		  if (document.visibilityState === 'hidden') {
+		    document.title = '页面不可见';	
+		    var item = +localStorage.getItem('count'); 
+
+		    if(!item){
+				localStorage.setItem('count',1);
+		    }else{
+		    	item++;
+		    	localStorage.setItem('count',item);
+		    }   
+		    
+		  }
+
+		  // // 用户打开或回到页面
+		  // if (document.visibilityState === 'visible') {
+		  //   document.title = '页面可见';
+		  //   var item = window.localStorage.getItem('test') || '-1';
+		  //   console.log(item);
+		  // }
+		});
+	</script>
+</body>
+</html>

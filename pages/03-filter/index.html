@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    let data = [{
+        type: '按部门',
+        year: 2018,
+        name: 'name1'
+      },
+      {
+        type: '按部门',
+        year: 2017,
+        name: 'name2'
+      },
+      {
+        type: '按公安',
+        year: 2018,
+        name: 'name3'
+      },
+      {
+        type: '按公安',
+        year: 2017,
+        name: 'name4'
+      }
+    ]
+
+
+    filterFunc(data, ['type', '按公安'], ['year', 2018])
+
+    function filterFunc(data, ...rest) {      
+      //普通方法
+      var temp = [],flag;
+      for(var i=0;i<data.length;i++){
+        flag=true;
+        for(var j=0;j<rest.length;j++){
+          if(data[i][rest[j][0]] !==rest[j][1]){
+            flag = false
+          }
+        }
+        flag && temp.push(data[i])
+      }
+      console.log(temp);
+
+      // 一般方法
+      var fixData = data.filter(item => {
+          var fix = rest.map(innerItem => item[innerItem[0]] == innerItem[1])
+          console.log(fix)
+          return fix.indexOf(false) === -1
+        }
+
+      )
+
+      console.log(fixData);
+      // 精简
+
+      var fix = data.filter(item => rest.map(innerItem => item[innerItem[0]]==innerItem[1]).indexOf(false)===-1)
+      console.log(fix);
+    }
+
+   
+  </script>
+</body>
+
+</html>
