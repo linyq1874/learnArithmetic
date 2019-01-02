@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  string 每个单词首字母大写
+  <script>
+    const str = 'aadf dsfaf dfdf qwe';
+
+    function findFirstUpperCase(str){
+      return str.toLowerCase().split(' ').map(item => {
+        return item.replace(item[0],item[0].toUpperCase())
+      }).join(' ')
+    }
+
+    console.log(findFirstUpperCase(str))
+  </script>
+</body>
+</html>

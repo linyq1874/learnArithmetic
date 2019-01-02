@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  回文
+  <script>
+
+    const str = "never odd or even";
+    function palindrome(str) {
+      /**
+       * ^ 在 [ ] 里并且在开头，表示匹配时取反，这是正则表达式的用法。
+       * [A-z] 等于 [a-zA-Z] 表示匹配所有大小写字母0-9 表示数字
+      */
+      var new_str = str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().split('');
+      return new_str.join('') === new_str.reverse().join('');
+    }
+    console.log(palindrome(str));
+  </script>
+</body>
+
+</html>
