@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <p>链表：链表是一个线性结构，同时也是一个天然的递归结构。</p>
+  <p>链表结构可以充分利用计算机内存空间，实现灵活的内存动态管理。</p>
+  <p>但是链表失去了数组随机读取的优点，同时链表由于增加了结点的指针域，</p>
+  <p>空间开销比较大。</p>
+  <script>
+    class Node {
+      constructor(val, next) {
+        this.val = val;
+        this.next = next;
+      }
+    }
+
+    class LinkList {
+      constructor() {
+        this.size = 0;
+        this.head = new Node(null, null)
+      }
+
+      // 查找插入节点的位置
+      find(head, index, curIndex) {
+        return index === curIndex ?
+          head :
+          this.find(head.next, index, curIndex + 1)
+      }
+
+      // index 为数组下标，从0开始，0为第一个有数据的结点，不是头结点
+      checkIndex(index) {
+        if (index < 0 || index > this.size) throw Error('index error')
+      }
+
+      addNode(val, index) {
+        this.checkIndex(index);
+        // 当往链表末尾插入时，prev.next 为空
+        // 其他情况时，因为要插入节点，所以插入的节点
+        // 的 next 应该是 prev.next
+        // 然后设置 prev.next 为插入的节点
+        let prev = this.find(this.head, index, 0);
+        prev.next = new Node(val, prev.next);
+        this.size++;
+        return prev.next;
+      }
+
+      insertNode(val, index) {
+        return this.addNode(val, index)
+      }
+
+      // 头插法
+      addToFirst(val) {
+        return this.addNode(val, 0)
+      }
+
+      // 尾插法
+      addToLast(val) {
+        return this.addNode(val, this.size)
+      }
+
+      // 删除并返回删除的节点
+      removeNode(index) {
+        this.checkIndex(index);        
+        let prev = this.find(this.head, index, 0);
+        let node = prev.next;
+        prev.next = node.next;
+        node.next = null;
+        this.size--;
+        return node;
+      }
+
+      removeFirstNode(){
+        return this.removeNode(0)
+      }
+
+      removeLastNode() {
+        return this.removeNode(this.size - 1)
+      }
+
+      isEmpty() {
+        return this.size === 0
+      }
+
+      // 获取链表长度
+      getSize() {
+        return this.size
+      }
+
+      getNode(index) {
+        this.checkIndex(index)
+        if(this.isEmpty()) return;
+        return this.find(this.head, index, 0).next;
+      }
+
+      show() {
+        let head = this.head
+        console.log('head -> ')
+        while(head.next != null && head.next.val != null) {
+          head.next.next != null 
+            ? console.log(head.next.val + '->')
+            : console.log(head.next.val + '');
+          head = head.next;
+        }
+        // console.log(null)
+      }
+    }
+
+    let link = new LinkList();
+    // link.show();
+    // link.addToFirst(1);
+    // link.addToFirst(3);
+    link.addToLast(1);
+    link.addToLast(13);
+    link.addToLast(3);
+    link.addToLast(123);
+    link.show();
+
+    link.removeNode(2);
+    link.show();
+
+  </script>
+</body>
+
+</html>
