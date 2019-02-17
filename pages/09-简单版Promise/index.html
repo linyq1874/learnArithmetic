@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  简单版promise
+  <script>
+    const PENDING = "pending",
+      RESOLVED = "resolved",
+      REJECTED = "rejected";
+
+    class MyPromise {
+      constructor(executor) {
+        this.state = PENDING;
+        this.value = null;
+        this.reason = null;
+
+        this.resolvedCallbacks = [];
+        this.rejectedCallbacks = [];
+
+        let resolve = value => {
+          if (this.state === PENDING) {
+            this.state = RESOLVED;
+            this.value = value;
+
+            this.resolvedCallbacks.forEach(cb => cb(this.value))
+          }
+        }
+
+        let reject = reason => {
+          if (this.state === PENDING) {
+            this.state = REJECTED;
+            this.reason = reason;
+
+            this.rejectedCallbacks.forEach(cb => cb(this.reason))
+          }
+        }
+
+        try {
+          executor(resolve, reject)
+        } catch (error) {
+          reject(error)
+        }
+      }
+
+      then(onFulfilled, onRejected) {
+        onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
+        onRejected = typeof onRejected === 'function' ? onRejected : v => v;
+
+        if (this.state === PENDING) {
+          this.resolvedCallbacks.push(onFulfilled);
+          this.rejectedCallbacks.push(onRejected);
+        }
+
+        if (this.state === RESOLVED) {
+          onFulfilled(this.value)
+        }
+
+        if (this.state === REJECTED) {
+          onRejected(this.reason)
+        }
+      }
+    }
+
+    let p1 = new MyPromise(function (resolve, reject) {
+      console.log('myPromise');
+      setTimeout(() => {
+          resolve(999999999)
+        },
+        0);
+      // reject('err')
+      // resolve(4)
+    })
+
+    p1.then(res => {
+        console.log('res', res)
+      },
+      err => {
+        console.log('err', err)
+      })
+
+
+    console.log('====================================');
+    console.log('====================================');
+    let p2 = new Promise(function (resolve, reject) {
+      console.log('Promise');
+      // reject('err')
+
+      setTimeout(() => {
+        resolve(3333)
+      }, 0)
+    })
+
+    p2.then(res => {
+        console.log('then1', res)
+        return 99;
+      },
+      err => {
+        console.log('err', err)
+      }
+    ).then(res => {
+      console.log('then2', res)
+    })
+  </script>
+</body>
+
+</html>
