@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  二分搜索树：
+  <p>
+    二分搜索树也是二叉树，拥有二叉树的特性。但是区别在于二分搜索树每个节点的值都比他的左子树的值大，比右子树的值小。
+
+    这种存储方式很适合于数据搜索。如下图所示，当需要查找 6 的时候，因为需要查找的值比根节点的值大，所以只需要在根节点的右子树上寻找，大大提高了搜索效率。
+  </p>
+
+  <script>
+    // 二叉树结点
+    class Node {
+      constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+
+        // 排名新增
+        this.size = 1;
+      }
+    }
+
+    class BST {
+      constructor() {
+        this.root = null;
+        // this.size = 0; 排名新增
+      }
+
+      getSize() {
+        // return this.size; 排名新增
+        return this._getSize(this.root)
+      }
+
+      // 排名新增
+      _getSize(node) {
+        return node ? node.size : 0
+      }
+
+      isEmpty() {
+        return this.size === 0;
+      }
+
+      addNode(v) {
+        this.root = this._addChild(this.root, v)
+      }
+      // 添加节点时，需要比较添加的节点值和当前
+      // 节点值的大小
+      _addChild(node, v) {
+        if (!node) {
+          // this.size++;  排名新增
+          return new Node(v)
+        }
+
+        // 递归调用
+        if (node.val > v) {
+          node.size++; // 排名新增
+          node.left = this._addChild(node.left, v)
+        } else if (node.val < v) {
+          node.size++; // 排名新增
+          node.right = this._addChild(node.right, v)
+        }
+
+        return node;
+      }
+
+
+      /*
+       输出结点
+      */
+      // 1.先序遍历
+      // 先序遍历可用于打印树的结构
+      // 先序遍历先访问根节点，然后访问左节点，最后访问右节点。
+      preTraversal() {
+        console.log('pre')
+        this._pre(this.root)
+      }
+
+      _pre(node) {
+        if (node) {
+          console.log(node.val + '->');
+          this._pre(node.left);
+          this._pre(node.right)
+        }
+      }
+
+      // 2.中序遍历可用于排序
+      // 对于 BST 来说，中序遍历可以实现一次遍历就
+      // 得到有序的值
+      // 中序遍历表示先访问左节点，然后访问根节点，最后访问右节点。
+      midTraversal() {
+        console.log('mid')
+        this._mid(this.root)
+      }
+
+      _mid(node) {
+        if (node) {
+          this._mid(node.left);
+          console.log(node.val + '->');
+          this._mid(node.right)
+        }
+      }
+      // 3.后序遍历可用于先操作子节点
+      // 再操作父节点的场景
+      // 后序遍历表示先访问左节点，然后访问右节点，最后访问根节点。
+      backTraversal() {
+        console.log('back')
+        this._back(this.root)
+      }
+
+      _back(node) {
+        if (node) {
+          this._back(node.left);
+          this._back(node.right);
+          console.log(node.val + '->')
+        }
+      }
+
+      /*
+        获取最大值与最小值
+        最小值一定在根节点的最左边，最大值相反
+      */
+      getMin() {
+        return this._getMin(this.root).val;
+      }
+
+      _getMin(node) {
+        if (!node.left) return node;
+        return this._getMin(node.left)
+      }
+
+      getMax() {
+        return this._getMax(this.root).val;
+      }
+
+      _getMax(node) {
+        if (!node.right) return node;
+        return this._getMax(node.right)
+      }
+
+      /*
+        向下或者向上取整,获取结点的值
+        向下取整，那么根据二分搜索树的特性，值一定在根节点的左侧。
+        只需要一直遍历左子树直到当前节点的值不再大于等于需要的值，
+        然后判断节点是否还拥有右子树。如果有的话，继续上面的递归判断。
+      */
+      floor(v) {
+        let node = this._floor(this.root, v)
+        return node ? node.val : null;
+      }
+
+      _floor(node, val) {
+        // 向下没有结点
+        if (!node) return null;
+        // 相等则取该值
+        if (node.val === val) return val;
+        // 左子树
+        if (node.val > val) {
+          return this._floor(node.left, val)
+        }
+        // 右子树
+        let right = this._floor(node.right, val)
+        if (right) return right;
+
+        return node;
+      }
+
+      ceil(v) {
+        let node = this._ceil(this.root, v);
+        return node ? node.val : null;
+      }
+
+      _ceil(node, v) {
+        if (!node) return null;
+        if (node.val === v) return v;
+        // 右子树
+        if (node.val < v) {
+          return this._ceil(node.right, v)
+        }
+        // 左子树
+        let left = this._ceil(node.left, v);
+        if (left) return left;
+
+        return node;
+      }
+
+      /*
+        排名新增
+
+        排名，这是用于获取给定值的排名或者排名第几的节点的值，
+        这两个操作也是相反的，所以这个只介绍如何获取排名第几的节点的值。
+        对于这个操作而言，我们需要略微的改造点代码，让每个节点拥有一个 size 属性。
+        该属性表示该节点下有多少子节点（包含自身）。
+      */
+      select(k) {
+        k--;
+        let node = this._select(this.root, k);
+        return node ? node.val : null;
+      }
+
+      _select(node, k) {
+        if (!node) return null;
+        // 先获取左子树下有几个节点
+        let size = node.left ? node.left.size : 0;
+        // 判断 size 是否大于 k
+        // 如果大于 k，代表所需要的节点在左节点
+        if (size > k) return this._select(node.left, k)
+        // 如果小于 k，代表所需要的节点在右节点
+        // 注意这里需要重新计算 k，减去根节点除了右子树的节点数量
+        if (size < k) return this._select(node.right, k - size - 1);
+
+        return node;
+      }
+      /*
+        排名新增 end
+      */
+
+      /**
+        删除节点。因为对于删除节点来说，会存在以下几种情况
+
+        1.需要删除的节点没有子树
+        2.需要删除的节点只有一条子树
+        3.需要删除的节点有左右两条树
+      */
+      deleteMin() {
+        this.root = this._delMin(this.root);
+        console.log('delMin', this.root);
+      }
+      _delMin(node) {
+        // 一直递归左子树
+        // 如果左子树为空，就判断节点是否拥有右子树
+        // 有右子树的话就把需要删除的节点替换为右子树
+        if (node && !node.left) return node.right;
+
+        node.left = this._delMin(node.left)
+
+        // 最后需要重新维护下节点的 `size`
+        node.size = this._getSize(node.left) + this._getSize(node.right) + 1;
+
+        return node;
+      }
+
+      deleteMax() {
+        this.root = this._delMax(this.root);
+        console.log('delMax', this.root);
+      }
+
+      _delMax(node) {
+        if (node && !node.right) return node.left;
+
+        node.right = this._delMax(node.right);
+
+        node.size = this._getSize(node.left) + this._getSize(node.right) + 1;
+
+        return node;
+      }
+
+
+      /*
+        删除任意节点:
+        需要取出当前节点的后继节点（也就是当前节点右子树的最小节点）来替换需要删除的节点。
+        然后将需要删除节点的左子树赋值给后继结点，右子树删除后继结点后赋值给他。
+
+        因为二分搜索树的特性，父节点一定比所有左子节点大，比所有右子节点小。
+        那么当需要删除父节点时，势必需要拿出一个比父节点大的节点来替换父节点。
+        这个节点肯定不存在于左子树，必然存在于右子树。然后又需要保持父节点都是比右子节点小的，
+        那么就可以取出右子树中最小的那个节点来替换父节点。
+      */
+
+      deleteNode(v) {
+        this.root = this._delNode(this.root, v);
+        console.log('deleteNode', this.root)
+      }
+
+      _delNode(node, v) {
+        if (!node) return null;
+        // 寻找的节点比当前节点小，去左子树找
+        if (node.val > v) {
+          node.left = this._delNode(node.left, v)
+        } else if (node.val < v) { // 寻找的节点比当前节点大，去右子树找
+          node.right = this._delNode(node.right, v)
+        } else {
+          // 进入这个条件说明已经找到节点
+          // 先判断节点是否只是拥有拥有左右子树中的一个
+          // 是的话，将子树返回出去，这里和 `_delMin` 的操作一样
+          if (!node.left) return node.right;
+          if (!node.right) return node.left;
+
+          // 进入这里，代表节点拥有左右子树
+          // 先取出当前节点的后继结点，也就是取当前节点右子树的最小值
+          let min = this._getMin(node.right);
+          // 取出最小值后，删除最小值
+          // 然后把删除节点后的子树赋值给最小值节点
+          min.right = this._delMin(node.right);
+          // 左子树不动
+          min.left = node.left;
+          node = min;
+        }
+
+        node.size = this._getSize(node.left) + this._getSize(node.right) + 1;
+
+        return node;
+      }
+    }
+
+    let bst = new BST();
+
+    bst.addNode(6);
+    bst.addNode(5);
+    bst.addNode(8);
+    bst.addNode(1);
+    bst.addNode(10);
+    bst.addNode(3);
+
+    console.log('size', bst.getSize());
+
+    bst.preTraversal();
+    bst.midTraversal();
+    bst.backTraversal();
+
+    console.log('max', bst.getMax());
+    console.log('min', bst.getMin());
+
+    console.log('floor4', bst.floor(4))
+    console.log('ceil4', bst.ceil(4))
+
+    console.log('select' + bst.getSize(), bst.select(bst.getSize()))
+    // bst.deleteMin();
+    // bst.deleteMax();
+    // bst.deleteNode(4);
+
+    bst.deleteNode(6);
+    bst.midTraversal();
+  </script>
+</body>
+
+</html>
