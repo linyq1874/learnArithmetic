@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  排名，这是用于获取给定值的排名或者排名第几的节点的值，这两个操作也是相反的，<br />
+  所以这个只介绍如何获取排名第几的节点的值。对于这个操作而言，我们需要略微的 <br />
+  改造点代码，让每个节点拥有一个 size 属性。该属性表示该节点下有多少子节点（包含自身）。 <br />
+
+  <script>
+    class Node {
+      constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+        this.size = 1;
+      }
+    }
+
+    class BST {
+      constructor() {
+        this.root = null;
+        // this.size = 0;
+      }
+
+      getSize() {
+        return this._getSize(this.root)
+      }
+
+      _getSize(node) {
+        return node ? node.size : 0
+      }
+
+      addNode(v) {
+        this.root = this._addChild(this.root, v);
+      }
+
+      _addChild(node, v) {
+        if (!node) {
+          return new Node(v)
+        }
+
+        if (node.val > v) {
+          node.size++;
+          node.left = this._addChild(node.left, v)
+        } else if (node.val < v) {
+          node.size++;
+          node.right = this._addChild(node.right, v)
+        }
+
+        return node;
+      }
+
+      select(k) {
+        k = k - 1;
+        let node = this._select(this.root, k);
+        return node ? node.val : null;
+      }
+
+      _select(node, k) {
+        if (!node) return null;
+        let size = node.left ? node.left.size : 0;
+
+        if (size > k) return this._select(node.left, k);
+        if (size < k) return this._select(node.right, k - size - 1);
+
+        return node;
+      }
+    }
+
+    let bst = new BST();
+    console.log('size',bst.getSize());
+    bst.addNode(6);
+    bst.addNode(5);
+    bst.addNode(8);
+    bst.addNode(1);
+    bst.addNode(10);
+    bst.addNode(3);
+
+    console.log('size',bst.getSize());
+    console.log('select',bst.select(6));
+  </script>
+</body>
+
+</html>
