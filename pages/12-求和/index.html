@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+两个数不使用四则运算得出和
+<script>
+  function sum(a,b) {
+    if(b === 0 ) return a;
+    if(a === 0 ) return b;
+    var newA = (a ^ b);
+    var newB = (a & b)<<1;
+    return sum(newA, newB);
+  }
+
+  console.log(sum(10,30))
+</script>
+</body>
+</html>

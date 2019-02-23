@@ -21,6 +21,7 @@
       }
     }
 
+    // 插入节点，最后必须插入null结点
     class LinkList {
       constructor() {
         this.size = 0;
@@ -46,9 +47,11 @@
         // 的 next 应该是 prev.next
         // 然后设置 prev.next 为插入的节点
         let prev = this.find(this.head, index, 0);
+        console.log(prev);
+
         prev.next = new Node(val, prev.next);
         this.size++;
-        return prev.next;
+        return prev;
       }
 
       insertNode(val, index) {
@@ -67,7 +70,7 @@
 
       // 删除并返回删除的节点
       removeNode(index) {
-        this.checkIndex(index);        
+        this.checkIndex(index);
         let prev = this.find(this.head, index, 0);
         let node = prev.next;
         prev.next = node.next;
@@ -76,7 +79,7 @@
         return node;
       }
 
-      removeFirstNode(){
+      removeFirstNode() {
         return this.removeNode(0)
       }
 
@@ -95,20 +98,48 @@
 
       getNode(index) {
         this.checkIndex(index)
-        if(this.isEmpty()) return;
+        if (this.isEmpty()) return;
         return this.find(this.head, index, 0).next;
       }
 
       show() {
         let head = this.head
         console.log('head -> ')
-        while(head.next != null && head.next.val != null) {
-          head.next.next != null 
-            ? console.log(head.next.val + '->')
-            : console.log(head.next.val + '');
+        while (head.next != null && head.next.val != null) {
+          head.next.next.next != null ?
+            console.log(head.next.val + '->') :
+            console.log(head.next.val + '');
           head = head.next;
         }
+        // while (head != null && head.val != null) {
+        //   head.next != null ?
+        //     console.log(head.val + '->') :
+        //     console.log(head.val + '');
+        //   head = head.next;
+        // }
         // console.log(null)
+      }
+
+      reverse() {
+        if (!this.head || !this.head.next) return this.head;
+
+        // 初始设置为空，因为第一个节点反转后就是尾部，尾部节点指向 null
+        let pre = null
+        let current = this.head
+        let next
+        // 判断当前节点是否为空
+        // 不为空就先获取当前节点的下一节点
+        // 然后把当前节点的 next 设为上一个节点
+        // 然后把 current 设为下一个节点，pre 设为当前节点
+        while (current) {
+          next = current.next;
+          current.next = pre;
+          pre = current;
+          current = next;
+        }
+
+        this.head = pre;
+
       }
     }
 
@@ -120,11 +151,23 @@
     link.addToLast(13);
     link.addToLast(3);
     link.addToLast(123);
+    link.addToLast(null);
     link.show();
 
-    link.removeNode(2);
-    link.show();
+    // link.removeNode(2);
+    // link.show();
 
+    // link.reverse();
+    // link.show();
+
+    // let link2 = new LinkList();
+    // link2.addToLast(2);
+    // link2.addToLast(1);
+    // link2.addToLast(3);
+    // // link2.addToLast(null);
+    // link2.show();
+    // link2.reverse();
+    // link2.show();
   </script>
 </body>
 

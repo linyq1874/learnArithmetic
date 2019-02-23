@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  排序
+  <script>
+    function swap(arr, left, right) {
+      var tmp = arr[right];
+      arr[right] = arr[left];
+      arr[left] = tmp;
+    }
+
+    // 冒泡 
+    function bubble(arr) {
+      if (!Array.isArray(arr)) {
+        throw new TypeError('type error')
+      }
+
+      for (var i = arr.length - 1; i > 0; i--) {
+        for (var j = 0; j < i; j++) {
+          if (arr[j] > arr[j + 1]) {
+            swap(arr, j, j + 1)
+          }
+        }
+      }
+
+    }
+
+    // 插入排序 
+    function insertion(arr) {
+      if (!Array.isArray(arr)) {
+        throw new TypeError('type error')
+      }
+
+      for (var i = 1, length = arr.length; i < length; i++) {
+        for (var j = i - 1; j >= 0 && arr[j] > arr[j + 1]; j--) {
+          swap(arr, j, j + 1)
+        }
+      }
+    }
+
+    var arr = [1, 5, 3, 2];
+    bubble(arr);
+    console.log(arr);
+
+    // 将 [2,0,2,1,1,0] 排序成 [0,0,1,1,2,2] ，这个问题就可以使用三路快排的思想。
+    function sortColors(arr) {
+      var right = arr.length,
+        left = -1,
+        i = 0;
+
+      while (i < right) {
+        if (arr[i] == 0) {
+          swap(arr, i++, ++left);
+        } else if (arr[i] === 1) {
+          i++;
+        } else {
+          swap(arr, i, --right)
+        }
+      }
+    }
+
+    var arr = [1, 0, 2, 2, 0, 1];
+    sortColors(arr);
+    console.log(arr);
+
+    function findKthLargest(arr, k) {
+      var l = 0,
+        r = arr.length - 1,
+        k = arr.length - k;
+
+      while (l < r) {
+        var index = findIndex(arr, l, r);
+        if (index < k) {
+          l = index + 1;
+        } else if (index > k) {
+          r = index - 1
+        } else {
+          break;
+        }
+      }
+
+      return arr[k];
+    }
+
+    /**    
+      找出数组中第 K 大的元素，这问题也可以使用快排的思路。
+      并且因为是找出第 K 大元素，所以在分离数组的过程中，
+      可以找出需要的元素在哪边，然后只需要排序相应的一边数组就好。
+    */
+    function findIndex(arr, left, right) {
+      var i = left,
+        j = right,
+        pivot = arr[left];
+
+      while (i < j) {
+        while (arr[j] >= pivot && i < j) {
+          j--;
+        }
+        while (arr[i] <= pivot && i < j) {
+          i++;
+        }
+        if (i < j) {
+          swap(arr, i, j)
+        }
+      }
+      arr[left] = arr[i];
+      arr[i] = pivot;
+
+      return i;
+    }
+
+    var arr = [3, 1, 2, 6, 4, 5];
+    var result = findKthLargest(arr, 1);
+    console.log(result);
+  </script>
+</body>
+
+</html>

@@ -35,8 +35,47 @@
 
     let arr = [3, 5, 7, 2, 1, 7, 5, 9, 8, 0];
     let sortArr = quickSort(arr);
-    console.log('before',arr);
-    console.log('after',sortArr);
+    console.log('before', arr);
+    console.log('after', sortArr);
+
+    // 方法二
+    function quickSort2(arr, left, right) {
+      
+      if (left > right) return;
+
+      var i = left,
+        j = right,
+        pivot = arr[left];
+
+      while (i !== j) {
+        while (arr[j] >= pivot && i < j) {
+          j--;
+        }
+
+        while (arr[i] <= pivot && i < j) {
+          i++;
+        }
+
+        if (i < j) {
+          var temp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = temp;
+        }
+      }
+
+      arr[left] = arr[i];
+      arr[i] = pivot;
+
+      quickSort2(arr, left, i - 1);
+      quickSort2(arr, i + 1, right);
+
+    }
+
+
+
+    var array = [4, 7, 2, 8, 3, 9, 12];
+    quickSort2(array, 0, array.length - 1)
+    console.log(array);
   </script>
 </body>
 

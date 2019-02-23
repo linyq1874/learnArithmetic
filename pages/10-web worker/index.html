@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  只需调用Worker() 构造函数并传入一个要在 worker 线程内运行的脚本的URI，即可创建一个新的worker。
+  <script>
+    /**
+     * 以下注释内容，在谷歌浏览器无法使用
+     * 在ie下能用
+     */
+    let myWorker = new Worker('task.js');
+
+    // myWorker.postMessage([10,20])
+
+    myWorker.onmessage = function (e) {
+      let data = e.data;
+      console.log('====================================');
+      console.log('main', e, data);
+      console.log('====================================');
+    }
+    myWorker.onerror = function (e) {
+      // let data = e.data;
+      console.log('====================================');
+      console.log('maerrin', e);
+      console.log('====================================');
+    }
+
+    /**
+     * 通过URL.createObjectURL()创建URL对象，可以实现创建内嵌的worker
+     */
+    // let myTask =
+    //   `
+    //   let i = 0;
+    //   function count() {
+    //     i++;
+    //     postMessage(i);
+    //     setTimeout(count,1000)
+    //   }
+    //   count();
+    // `
+    // let blob = new Blob([myTask]);
+    // let myWorker = new Worker(window.URL.createObjectURL(blob));
+
+    // myWorker.onmessage = e => {
+    //   console.log(e.data);
+    //   if (e.data == 10) {
+    //     myWorker.terminate();
+    //   }
+    // }
+    // myWorker.onerror = e => {
+    //   console.log(e.filename + e.message);
+    // }
+  </script>
+</body>
+
+</html>
