@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  二分查找
+
+  <script>
+    function binaryFind(arr, target, left, right) {
+      var left = left || 0,
+        right = right || arr.length - 1,
+        mid = (left + right) >> 1;
+
+      if (target === arr[mid]) {
+        return mid;
+      } else if (target > arr[mid]) {
+        return binaryFind(arr, target, mid + 1, right)
+      } else {
+        return binaryFind(arr, target, left, mid - 1)
+      }
+
+      return -1;
+
+    }
+
+
+    var arr = [1, 2, 3, 4];
+
+    console.log(binaryFind(arr, 4));
+  </script>
+</body>
+
+</html>

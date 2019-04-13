@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var tree = {
+      name: 'a',
+      age: 10,
+      child: {
+        name: 'b',
+        age: 20,
+        child: {
+          name: 'c',
+          age: 30
+        }
+      }
+    }
+
+    function howOld(name) {
+      var node = tree;
+      return _howOld(node, name)
+    }
+
+    function _howOld(node, name) {
+      if (typeof name !== "string") return new Error('error');
+
+      if (node.name === name) {
+        return node.age;
+      } else if (node.child && node.child instanceof Object) {
+        return _howOld(node.child, name)
+      }
+
+      return -1;
+    }
+
+    console.log(howOld('c'))
+
+    var arrA = [1, 2, 4, 6],
+      arrB = [2, 4, 7, 8];
+
+    function union() {
+
+      var args = [...arguments],
+        arr = args[0].concat(args[1]),
+        result = [],
+        validate = {};
+
+      console.log([...new Set(arr)]);
+
+
+      for (var i = 0, length = arr.length; i < length; i++) {
+        if (!validate[arr[i]]) {
+          validate[arr[i]] = true;
+          result.push(arr[i])
+        }
+      }
+
+      return result;
+
+    }
+
+    console.log(union(arrA, arrB))
+
+
+    var some = {
+      1: 'aa',
+      2: 'bb',
+      length: 2
+    }
+
+    for(var key in some) {
+      console.log(key, some[key])
+    }
+
+    var keys = Object.keys(some)
+
+    keys.forEach(item => {
+      console.log(item,some[item])
+    })
+
+
+  </script>
+</body>
+
+</html>

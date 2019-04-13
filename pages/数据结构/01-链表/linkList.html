@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <script>
+    class Node {
+      constructor(val) {
+        this.val = val;
+        this.next = null;
+      }
+    }
+
+    class LinkList {
+      constructor() {
+        this.head = null;
+        this.size = 0;
+      }
+
+      append(val) {
+        let node = new Node(val);
+        let current = null;
+        if (this.head === null) {
+          this.head = node;
+        } else {
+          current = this.head;
+          while (current.next) {
+            current = current.next;
+          }
+          current.next = node;
+        }
+
+        this.size++;
+      }
+
+      insertNode(val, position) {
+        if (position >= 0 && position <= this.size) {
+          let node = new Node(val),
+            current = this.head,
+            prev = null,
+            index = 0;
+
+          if (position === 0) {
+            node.next = current;
+            this.head = node;
+          } else {
+            while (index < position) {
+              prev = current;
+              current = current.next;
+              index++;
+            }
+
+            node.next = current;
+            prev.next = node;
+          }
+          this.size++;
+        } else {
+          throw new Error('position error')
+        }
+      }
+
+      indexOf(val) {
+        let current = this.head,
+          index = 0;
+
+        while (current) {
+          if (current.val === val) {
+            return index
+          }
+          index++;
+          current = current.next
+        }
+
+        return -1
+      }
+
+      removeNode(position) {
+        if (position >= 0 && position < this.size) {
+          let current = this.head,
+            prev = null,
+            index = 0;
+
+          if (position === 0) {
+            this.head = current.next
+          } else {
+            while (index < position) {
+              prev = current;
+              current = current.next;
+              index++
+            }
+
+            prev.next = current.next
+          }
+
+          this.size--;
+          return current.val;
+        } else {
+          throw new Error('position error')
+        }
+      }
+
+      // 打印
+      toString() {
+        let current = this.head
+        let str = 'head -> '
+        while (current) {
+          if (current.next) {
+            str += current.val + '-> '
+          } else {
+            str += current.val
+          }
+          current = current.next
+        }
+
+        return str + '-> null'
+      }
+
+      reverse() {
+        if (!this.head || !this.head.next) return this.head;
+        let current = this.head,
+          prev = null,
+          next = null;
+
+        // prev.next = null;
+        while (current) {
+          next = current.next;
+          current.next = prev;
+          prev = current;
+          current = next;
+        }
+
+        this.head = prev;
+      }
+
+    }
+
+    let link = new LinkList();
+
+    link.append(10);
+    link.append(11);
+    link.append(12);
+    link.append(13);
+
+    console.log(link.toString());
+
+
+
+    link.removeNode(2);
+    console.log(link.toString());
+
+    console.log(link.indexOf(13));
+    link.reverse();
+    console.log(link.toString());
+  </script>
+</body>
+
+</html>

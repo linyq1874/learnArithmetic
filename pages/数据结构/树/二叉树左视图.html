@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  二叉树 左视图
+
+  <script>
+    class Queue {
+      constructor() {
+        this.arr = [];
+      }
+
+      insert(val) {
+        this.arr.push(val)
+      }
+
+      pop() {
+        return this.arr.shift()
+      }
+
+      isEmpty() {
+        return this.arr.length === 0;
+      }
+
+      show() {
+        console.log('show:');
+
+        this.arr.forEach(item => {
+          console.log(item);
+        })
+      }
+    }
+
+    class Node {
+      constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+      }
+    }
+
+    class Tree {
+      constructor() {
+        this.root = null;
+        this.size = 0;
+      }
+
+      levelTravel() {
+        let queue = new Queue(),
+          root = this.root,
+          newArr = [];
+
+        console.log('level travel')
+
+        if (!root) return null;
+
+        queue.insert(root);
+        while (!queue.isEmpty()) {
+          let node = queue.pop();
+          console.log(node.val);
+
+          if (node.left) {
+            queue.insert(node.left)
+          }
+          if (node.right) {
+            queue.insert(node.right)
+          }
+        }
+      }
+
+      leftView() {
+        let que = [],
+          newQue = [],
+          root = this.root;
+        console.log('left view')
+        if(!root) return null;
+        que.push(root);
+
+        while (que.length !==0 ) {
+          console.log(que[0].val)
+
+          while(que.length !== 0 ) {
+            let node = que.shift();
+
+            if(node.left) {
+              newQue.push(node.left)
+            }
+            if(node.right) {
+              newQue.push(node.right)
+            }
+          }
+
+          let tmp = newQue;
+          newQue = que;
+          que = tmp;
+        }
+      }
+
+      preTravel() {
+        console.log('pre')
+        this._pre(this.root)
+      }
+
+      _pre(node) {
+        if (node) {
+          console.log(node.val);
+          this._pre(node.left);
+          this._pre(node.right);
+        }
+      }
+
+      midTravel() {
+        console.log('mid')
+        this._mid(this.root)
+      }
+
+      _mid(node) {
+        if (node) {
+          this._mid(node.left);
+          console.log(node.val);
+          this._mid(node.right);
+        }
+      }
+
+      addNode(val) {
+        this.root = this._addChild(this.root, val)
+      }
+
+      _addChild(node, val) {
+        if (!node) {
+          this.size++;
+          return new Node(val)
+        }
+
+        if (val < node.val) {
+          node.left = this._addChild(node.left, val)
+        } else if (val > node.val) {
+          node.right = this._addChild(node.right, val)
+        }
+
+        return node
+      }
+    }
+
+    let queue = new Queue();
+
+    queue.insert(1);
+    queue.insert(2);
+    queue.insert(21);
+    queue.insert(22);
+
+    queue.show();
+
+    queue.pop();
+    queue.show();
+
+
+    let tree = new Tree();
+
+    tree.addNode(5);
+    tree.addNode(1);
+    tree.addNode(2);
+    tree.addNode(8);
+    tree.addNode(6);
+    tree.addNode(7);
+    tree.addNode(9);
+
+    tree.preTravel();
+    tree.midTravel();
+    tree.levelTravel();
+    tree.leftView();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  去重
+  <script>
+    let arr = [{
+          id: 1,
+          name: 'apple'
+        },
+        {
+          id: 1,
+          name: 'banana'
+        },
+        {
+          id: 2,
+          name: 'pear'
+        }
+      ],
+      hash = {};
+
+    arr = arr.reduce((prev, cur) => {
+      // hash[cur.id] ? '' : hash[cur.id] = true && prev.push(cur)
+      if (!hash[cur.id]) {
+        hash[cur.id] = true;
+        prev.push(cur)
+      }
+
+      return prev
+    }, [])
+
+    console.log('====================================');
+    console.log(arr);
+    console.log('====================================');
+
+
+    function debounce(fn, await) {
+      var timer = null;
+      return function () {
+        let args = arguments,
+          context = this;
+
+        if (timer) clearTimeout(timer)
+
+        timer = setTimeout(function () {
+          fn.apply(context, args)
+        }, await)
+
+      }
+    }
+  </script>
+</body>
+
+</html>

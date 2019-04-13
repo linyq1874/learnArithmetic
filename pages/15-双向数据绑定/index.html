@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  双向数据绑定 <br>
+  1.
+  <pre>
+    Object.defineProperty(obj,key,{
+      enumerable:true,
+      configurable:true,
+      get:function() {
+        return obj[key]
+      },
+      set:function(val) {
+        obj[key] = val;
+      }
+    })
+  </pre>
+
+  2.
+  <pre>
+    Proxy(obj, handler);
+    let handler = {
+      get:function(obj, key, receiver) {
+        if(Reflect.has(obj, key)) {
+          return Reflect.get(obj, key, receiver)
+        } else {
+          throw new ReferenceError('no property')
+        }
+      },
+      set: function(obj, key, value, receiver) {
+        return Reflect.set(obj, key, value, receiver)
+      }
+    }
+  </pre>
+
+  <script>
+    const obj = {
+      name: 'qian'
+    }
+
+    const handler = {
+      get: function (obj, key, receiver) {
+        if (Reflect.has(obj, key)) {
+          console.log('proxy get')
+          // return Reflect.get(obj, key, receiver)
+          return `《${obj[key]}》`
+        } else {
+          throw new ReferenceError('no property')
+        }
+      },
+      set: function (obj, key, value, receiver) {
+        console.log('proxy set')
+        return Reflect.set(obj, key, value, receiver)
+      }
+    }
+
+    const proxy = new Proxy(obj, handler);
+
+    console.log(proxy.name);
+    proxy.name = 'lin';
+    console.log(proxy.name);
+
+
+    function DeReactive(obj, key, val) {
+      Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: true,
+        get: function () {
+          console.log('defineProperty get')
+          return val
+        },
+        set: function (newVal) {
+          console.log('defineProperty set')
+
+          val = newVal;
+        }
+      })
+    }
+    
+    DeReactive(obj, 'name')
+
+    console.log(obj.name)
+
+    // obj.name = 'handsome'
+    // console.log(obj.name)
+  </script>
+</body>
+
+</html>
