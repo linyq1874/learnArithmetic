@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  单例模式
+  <script>
+    var singleton = (function () {
+      var instance;
+
+      function init() {
+        var privateItem = "private item";
+        var privateRandomNum = Math.round(Math.random() * 10);
+        return {
+          publicItem: "I am public item",
+          publicRandomNum: function () {
+            return privateItem + ":" + privateRandomNum
+          }
+        }
+      };
+      return {
+        getInstance: function () {
+          if (!instance) {
+            instance = init();
+          }
+          return instance;
+        }
+      }
+    })()
+
+    var singletonA = singleton.getInstance();
+    var singletonB = singleton.getInstance();
+    console.log(singletonA.publicItem, singletonB.publicItem);
+    console.log(singleton.publicRandomNum === singleton.publicRandomNum);
+  </script>
+</body>
+
+</html>
