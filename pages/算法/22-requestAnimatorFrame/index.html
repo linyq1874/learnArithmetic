@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .box {
+      height: 200px;
+      width: 200px;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  window.requestAnimationFrame() 告诉浏览器——你希望执行一个动画，并且要求浏览器在下次重绘之前调用指定的回调函数更新动画。该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行
+
+  <div class="box"></div>
+  <script>
+    let startTime = 0,duration = 5000;
+    // 执行duration ms钟
+    function step(stampTime) {
+      startTime = startTime || stampTime;
+      let box = document.querySelector(".box");
+      box.style.width = box.offsetWidth + 1 + "px";
+      if (stampTime - startTime < duration) {
+        requestAnimationFrame(step)
+      } else {
+        box.style.width = "200px";
+        startTime = stampTime;
+        requestAnimationFrame(step)
+
+      }
+    }
+
+    requestAnimationFrame(step);
+  </script>
+</body>
+</html>
