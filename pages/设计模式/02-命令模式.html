@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="btn">replay</button>
+  <button id="reset">reset</button>
+  <script>
+    // 使用者发送请求
+    let makeCommand = (receiver, state) => () => {
+      state && receiver[state]()
+    };
+
+
+    // 接收者接收请求--------------------------------------------
+    let commandList = {
+      up() {
+        console.log("向上");
+      },
+      down() {
+        console.log("向下");
+      },
+      left() {
+        console.log("向左");
+      },
+      right() {
+        console.log("向右");
+      },
+    }
+
+    let commands = {
+      119: "up",
+      115: "down",
+      97: "left",
+      100: "right",
+    };
+
+    let commandStack = [];
+
+    document.onkeypress = (ev) => {
+      let keyCode = ev.keyCode,
+        command = makeCommand(commandList, commands[keyCode]);
+
+      if (commands[keyCode]) {
+        command();
+        commandStack.push(command)
+      }
+    }
+
+    // 撤销和重做功能--------------------
+    document.querySelector("#reset").onclick = () => {
+      if (commandStack.length) {
+
+        console.log("get->");
+        commandStack.pop()();
+
+      } else {
+        console.log("nothing!");
+
+      }
+    }
+
+    // 回放-------------------------------------
+    document.querySelector("#btn").onclick = () => {
+      setTimeout(function fn() {
+        if (commandStack.length) {
+          let command = commandStack.shift();
+          command();
+          setTimeout(fn, 1000)
+        } else {
+          console.log('done!')
+        }
+      }, 1000)
+
+    };
+  </script>
+</body>
+
+</html>
