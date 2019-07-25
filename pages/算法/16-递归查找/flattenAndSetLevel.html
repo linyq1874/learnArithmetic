@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    let tree = [{
+        id: 1,
+        children: [{
+            id: 2,
+            parent: 1,
+            children: [{
+                id: 3,
+                parent: 2,
+                children: []
+              },
+              {
+                id: 4,
+                parent: 2,
+                children: []
+              }
+            ]
+          },
+          {
+            id: 5,
+            parent: 1,
+            children: []
+          }
+        ]
+      },
+      {
+        id: 6,
+        children: []
+      }
+    ];
+
+    // function flatten(array) {
+    //   return [].concat(...array.map(item => [].concat(item, ...flatten(item.children))))
+    // }
+
+    const flatten = array => [].concat(...array.map(item => [].concat(item, ...flatten(item.children))));
+
+    // function find(array, item, level = 0) {
+    //   if (!item.parent) {
+    //     return level
+    //   } else {
+    //     return find(array, array.filter(parentItem => parentItem.id === item.parent)[0], ++level)
+    //   }
+    // }
+
+    const find = (array, item, level = 0) => !item.parent ?
+      level :
+      find(array, array.filter(parentItem => parentItem.id === item.parent)[0], ++level)
+
+    tree = flatten(tree);
+
+    tree.forEach(item => {
+      item.level = find(tree, item)
+    })
+
+    console.log(tree);
+  </script>
+</body>
+
+</html>
