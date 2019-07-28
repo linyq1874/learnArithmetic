@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  工厂模式
+  <script>
+    let UserFactory = function (role) {
+      if (this instanceof UserFactory) {
+        return new this[role]();
+      } else {
+        return new UserFactory(role);
+      }
+    }
+
+    UserFactory.prototype = {
+      superAdmin: function () {
+        this.name = "superAdmin";
+        this.viewPages = [1, 2, 3, 4]
+      },
+      admin: function () {
+        this.name = "admin";
+        this.viewPages = [1, 2, 3]
+      },
+      user: function () {
+        this.name = "user";
+        this.viewPages = [1, 2, ]
+      },
+    }
+
+    const role1 = UserFactory("admin");
+    const role2 = new UserFactory("superAdmin");
+    console.log(role1);
+    console.log(role2);
+
+    class UserFactoryClass {
+      constructor(opts = {}) {
+        this.name = opts.name;
+        this.viewPages = opts.viewPages;
+      }
+      getInstance(role) {
+        switch (role) {
+          case "superAdmin":
+            return new UserFactoryClass({
+              name: "superAdmin",
+              viewPages: [1, 2, 3, 4]
+            })
+            break;
+
+          case "admin":
+            return new UserFactoryClass({
+              name: "admin",
+              viewPages: [1, 2, 3, 4]
+            })
+            break;
+
+          case "user":
+            return new UserFactoryClass({
+              name: "user",
+              viewPages: [1, 2, 3, 4]
+            })
+            break;
+
+          default:
+            throw new Error("参数有错")
+            break;
+        }
+      }
+    }
+
+    const role = new UserFactoryClass();
+    const superAdmin = role.getInstance("superAdmin");
+    console.log(superAdmin);
+  </script>
+</body>
+
+</html>

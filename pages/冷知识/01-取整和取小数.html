@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .progress_bar {
+      height: 20px;
+      width: 0;
+      background: #f00;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>1.取整</h2>
+  <h3>parseInt,将字符串转化为整数，有两个参数。</h3>
+  <p>1、不是字符串时，将转化为字符串，再转化为整数</p>
+  <p>2、第二个参数为进制基数。第一个数每个数要小于第二个数，不然报NaN</p>
+  <h3>num|0</h3>
+  <p>坑点：只能取32位整数。而计算机最大有效位数为53位。</p>
+  <h3>Math.trunc(num)</h3>
+  <p>ES6,最好</p>
+  <h2>2、取小数</h2>
+  <p>利用取模也能对小数</p>
+  <hr>
+  <h2>示例：</h2>
+  匀速周期运动
+  <div class="progress_bar"></div>
+
+  <script>
+    const num = 15.75;
+    // 取整
+    console.log("parseInt", parseInt(num), "num|0", num | 0, "Math.trunc(num)", Math.trunc(num));
+    // 取小数
+    console.log("num % 1", num % 1);
+
+    const el = document.querySelector(".progress_bar");
+
+    const run = (el, duration) => {
+      const start = Date.now();
+
+      const update = (stamp) => {
+        let p = (stamp || Date.now() - start) / duration;
+        p %= 1;
+        el.style.width = `${300 * p}px`;
+
+        requestAnimationFrame(update)
+      }
+      update();
+    }
+    run(el, 3000);
+  </script>
+</body>
+
+</html>

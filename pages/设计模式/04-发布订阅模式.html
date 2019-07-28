@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  发布订阅
+  <script>
+    class Event {
+      constructor() {
+        this.events = {};
+        this.cacheList = [];
+      }
+      // 订阅者
+      on(eventType, fn) {
+        if (!this.events[eventType]) {
+          this.events[eventType] = [];
+        }
+        if (typeof fn !== "function") {
+          throw new Error("第二个参数必须为函数！")
+        }
+        this.events[eventType].push(fn);
+        this.cacheList.forEach(cache => cache());
+
+        return this;
+      }
+      // 发布者
+      emit() {
+        const args = arguments;
+        const cache = () => {
+          const eventType = Array.prototype.shift.call(args);
+          const arr = this.events[eventType];
+          if (!arr) {
+            throw new Error("没有此类型的事件！");
+          }
+
+          arr.forEach(fn => fn(...args))
+        }
+        this.cacheList.push(cache);
+
+        return this;
+      }
+    }
+
+    const ev = new Event();
+    setTimeout(() => {
+      ev.on("click", (data) => {
+        console.log(data);
+      })
+    })
+
+    ev.emit("click", {
+      a: 1,
+      b: 2
+    }).emit("click", {
+      c: 3
+    }).emit("click", {
+      c: 6
+    });
+  </script>
+</body>
+
+</html>
