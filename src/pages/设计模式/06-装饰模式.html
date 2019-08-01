@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  装饰者模式
+  <script type="text/babel">
+    const decorateATK = (target, key, descriptor) => {
+      const method = descriptor.value;
+      let moreDef = 100;
+      let ret;
+      descriptor.value = (...args)=>{
+        args[0] += moreDef;
+        ret = method.apply(target, args);
+        return ret;
+      }
+      return descriptor;
+    }
+    class Man {
+      constructor(atk = 2, dfs = 3, hp = 5) {
+        this.init(atk, dfs, hp)
+      }
+      // @decorateATK
+      init(atk, dfs, hp) {
+        this.atk = atk;
+        this.dfs = dfs;
+        this.hp = hp;
+      }
+      toString() {
+        console.log(`攻击力:${this.atk}-防御力:${this.dfs}-血量:${this.hp}`);
+
+      }
+    }
+
+    const tony = new Man();
+    tony.toString();
+
+    const fn = () => {
+      console.log(123)
+    }
+    fn();
+  </script>
+</body>
+
+</html>
