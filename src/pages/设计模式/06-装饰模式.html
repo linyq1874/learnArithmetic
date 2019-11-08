@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    装饰者模式
+    <script>
+      // function Man(atk = 2, dfs = 3, hp = 5) {
+      //   this.atk = atk;
+      //   this.dfs = dfs;
+      //   this.hp = hp;
+      // }
+
+      // Man.prototype = {
+      //   toString: function() {
+      //     console.log(`${this.atk}${this.dfs}${this.hp}`);
+      //   }
+      // };
+    </script>
+    <script>
+      class TakePhoto {
+        take() {
+          console.log("take photo!");
+        }
+      }
+      const after = (target, key, fn) => {
+        const old = target.prototype[key];
+        if (old) {
+          target.prototype[key] = (...args) => {
+            old.apply(this, args);
+            fn.apply(this);
+          };
+        }
+      };
+
+      after(TakePhoto, "take", () => {
+        console.log("加滤镜");
+      });
+
+      const before = (target, key, fn) => {
+        const old = target.prototype[key];
+        if (old) {
+          target.prototype[key] = (...args) => {
+            fn.apply(this);
+            old.apply(this, args);
+          };
+        }
+      };
+      let t = new TakePhoto();
+      before(TakePhoto, "take", () => {
+        console.log("打開相機！");
+      });
+      t.take();
+    </script>
+  </body>
+</html>

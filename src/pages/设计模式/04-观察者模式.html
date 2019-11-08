@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  观察者模式
+  <button id="addNewObserver">addNewObserver</button>
+  <input type="checkbox" id="mainCheckbox">
+  <div id="observersContainer"></div>
+
+  <script>
+    class ObserverList {
+      constructor() {
+        this.observeList = [];
+      }
+      add(obj) {
+        console.log(123);
+
+        return this.observeList.push(obj)
+      }
+      empty() {
+        this.observeList = [];
+      }
+      count() {
+        return this.observeList.length;
+      }
+      get(index) {
+        if (index > -1 && index < this.count()) {
+          return this.observeList[index];
+        }
+      }
+      indexOf(obj, startIndex) {
+        let i = startIndex;
+        while (i < this.count()) {
+          if (this.observeList[i] === obj) {
+            return i;
+          }
+          i++
+        }
+
+        return -1;
+      }
+      removeAt(index) {
+        if (index > -1 && index < this.count()) {
+          this.observeList.splice(index, 1);
+        }
+      }
+    }
+
+
+    //contructor function
+    function Subject() {
+      this.observers = new ObserverList();
+    }
+
+    //addObserver: 调用内部维护的ObserverList的add方法
+    Subject.prototype.addObserver = function (observer) {
+      this.observers.add(observer);
+    };
+
+    //removeObserver: 调用内部维护的ObserverList的removeat方法
+    Subject.prototype.removeObserver = function (observer) {
+      this.observers.removeAt(this.observers.indexOf(observer, 0));
+    };
+
+    //notify: 通知函数，用于通知观察者并且执行update函数，update是一个实现接口的方法，是一个通知的触发方法。
+    Subject.prototype.notify = function (context) {
+      var observerCount = this.observers.count();
+      for (var i = 0; i < observerCount; i++) {
+        this.observers.get(i).update(context);
+      }
+    };
+
+
+    class Observer {
+      update() {
+        console.log('====================================');
+        console.log('observer update');
+        console.log('====================================');
+      }
+    }
+
+    const extend = (obj, extension) => {
+      for (let key in extension) {
+        obj[key] = extension[key];
+      }
+      console.log(obj);
+
+    }
+
+
+    const addBtn = document.querySelector("#addNewObserver"),
+      controlCheckbox = document.querySelector("#mainCheckbox"),
+      container = document.querySelector("#observersContainer");
+
+    extend(controlCheckbox, new Subject());
+
+    controlCheckbox.onclick = () => {
+      controlCheckbox.notify(controlCheckbox.checked);
+    }
+
+    addBtn.onclick = () => {
+      const check = document.createElement("input");
+      check.type = "checkbox";
+      extend(check, new Observer());
+
+      check.update = function (val) {
+        this.checked = val;
+      }
+
+      controlCheckbox.addObserver(check);
+      container.appendChild(check);
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>组合模式</title>
+</head>
+
+<body>
+  <script>
+    class Folder {
+      constructor(folder) {
+        this.folder = folder;
+        this.list = [];
+      }
+      add(folder) {
+        this.list.push(folder);
+      }
+      scan() {
+        this.list.forEach(item => {
+          console.log("扫描文件夹：", this.folder);
+
+          item.scan();
+        })
+      }
+    }
+
+    class File {
+      constructor(file) {
+        this.file = file;
+      }
+      add(file) {
+        throw new Error("文件不能添加任何东西")
+      }
+      scan() {
+        console.log("扫描文件：", this.file)
+      }
+    }
+
+    const book = new Folder("书籍");
+    const computer = new Folder("计算机教材");
+    const comic = new Folder("漫画");
+
+    const Japan = new Folder("日漫");
+    const China = new Folder("国漫");
+
+    const book1 = new File("CSS 世界");
+    const book2 = new File("JS 世界");
+
+    const comic1 = new File("火影");
+    const comic2 = new File("海贼");
+    const comic3 = new File("一人之下");
+
+    book.add(computer);
+    book.add(comic);
+    computer.add(book1);
+    computer.add(book2);
+
+    comic.add(Japan);
+    comic.add(China);
+    Japan.add(comic1);
+    Japan.add(comic2);
+    China.add(comic3);
+    // comic2.add(comic3);
+
+    book.scan();
+  </script>
+</body>
+
+</html>
