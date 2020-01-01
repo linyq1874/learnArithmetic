@@ -40,7 +40,7 @@
 
     // 方法二
     function quickSort2(arr, left, right) {
-      
+
       if (left > right) return;
 
       var i = left,
@@ -57,9 +57,10 @@
         }
 
         if (i < j) {
-          var temp = arr[i];
-          arr[i] = arr[j];
-          arr[j] = temp;
+          // var temp = arr[i];
+          // arr[i] = arr[j];
+          // arr[j] = temp;
+          [arr[i], arr[j]] = [arr[j], arr[i]]
         }
       }
 

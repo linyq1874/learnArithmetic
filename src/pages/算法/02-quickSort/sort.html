@@ -17,7 +17,7 @@
       arr[left] = tmp;
     }
 
-    // 冒泡 
+    // 冒泡
     function bubble(arr) {
       if (!Array.isArray(arr)) {
         throw new TypeError('type error')
@@ -33,7 +33,7 @@
 
     }
 
-    // 插入排序 
+    // 插入排序
     function insertion(arr) {
       if (!Array.isArray(arr)) {
         throw new TypeError('type error')
@@ -78,11 +78,16 @@
 
       while (l < r) {
         var index = findIndex(arr, l, r);
+        // 比它小，则要找的数值在右边
         if (index < k) {
           l = index + 1;
-        } else if (index > k) {
+        }
+        // 大则要找的数值在左边
+        else if (index > k) {
           r = index - 1
-        } else {
+        }
+        // 相等则找到了
+        else {
           break;
         }
       }
@@ -90,7 +95,7 @@
       return arr[k];
     }
 
-    /**    
+    /**
       找出数组中第 K 大的元素，这问题也可以使用快排的思路。
       并且因为是找出第 K 大元素，所以在分离数组的过程中，
       可以找出需要的元素在哪边，然后只需要排序相应的一边数组就好。
@@ -117,8 +122,14 @@
       return i;
     }
 
+    var kth = 4
     var arr = [3, 1, 2, 6, 4, 5];
-    var result = findKthLargest(arr, 1);
+    var fix = [...arr]
+    var result = findKthLargest(fix, kth);
+    console.log('before: ', arr);
+
+    console.log(`find ${kth} fix:`, fix);
+
     console.log(result);
   </script>
 </body>

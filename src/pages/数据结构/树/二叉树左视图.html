@@ -52,6 +52,7 @@
         this.size = 0;
       }
 
+      // 广度优先遍历
       levelTravel() {
         let queue = new Queue(),
           root = this.root,
@@ -80,26 +81,27 @@
           newQue = [],
           root = this.root;
         console.log('left view')
-        if(!root) return null;
+        if (!root) return null;
         que.push(root);
 
-        while (que.length !==0 ) {
+        while (que.length !== 0) {
           console.log(que[0].val)
 
-          while(que.length !== 0 ) {
+          while (que.length !== 0) {
             let node = que.shift();
 
-            if(node.left) {
+            if (node.left) {
               newQue.push(node.left)
             }
-            if(node.right) {
+            if (node.right) {
               newQue.push(node.right)
             }
           }
 
-          let tmp = newQue;
-          newQue = que;
-          que = tmp;
+          // let tmp = newQue;
+          // newQue = que;
+          // que = tmp;
+          [que, newQue] = [newQue, que];
         }
       }
 
