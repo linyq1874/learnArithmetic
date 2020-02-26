@@ -1,22 +1,24 @@
-const proxy = new Proxy(
-  {},
-  {
-    get: function(target, proKey, receiver) {
-      if (Reflect.has(target, proKey)) {
-        console.log(`proxy get ${proKey}`)
-        return Reflect.get(target, proKey, receiver)
-      } else {
-        console.error(`${proKey} is not found`)
-      }
-    },
-    set(target, proKey, value, receiver) {
-      console.log(`proxy set ${proKey}`)
+const obj = {
+  name: 'lyq'
+}
 
-      return Reflect.set(target, proKey, value, receiver)
+const proxy = new Proxy(obj, {
+  get(target, proKey, receiver) {
+    if (Reflect.has(target, proKey)) {
+      console.log(`proxy get ${proKey}`)
+      return Reflect.get(target, proKey, receiver)
+    } else {
+      console.error(`${proKey} is not found`)
     }
-  }
-)
+  },
+  set(target, proKey, value, receiver) {
+    console.log(`proxy set ${proKey}`)
 
-proxy.name = 'lvyingying'
+    return Reflect.set(target, proKey, value, receiver)
+  }
+})
+
+// proxy.name = 'lvyingying'
 
 console.log(proxy.name)
+console.log(obj.name)

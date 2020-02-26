@@ -46,7 +46,12 @@ console.log('before:', arr)
 const r = quickSort([...arr], 0, arr.length - 1)
 console.log('after:', r)
 
-// 三路快排 arr = [2, 0, 2, 1, 1, 0] --> [0, 0, 1, 1, 2, 2]
+/**
+ * 三路快排 arr = [2, 0, 2, 1, 1, 0] --> [0, 0, 1, 1, 2, 2]
+ * 思路仍然是快排，确定基数，大的在右边，小的在左边。
+ * 可用辅助变量-1， length
+ * @param {*} arr
+ */
 function threeQuickSort(arr) {
   let left = -1,
     right = arr.length,

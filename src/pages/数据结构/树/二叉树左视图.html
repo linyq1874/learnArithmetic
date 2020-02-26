@@ -1,184 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
+  <body>
+    二叉树 左视图
 
-<body>
-  二叉树 左视图
+    <script>
+      class Queue {
+        constructor() {
+          this.arr = []
+        }
 
-  <script>
-    class Queue {
-      constructor() {
-        this.arr = [];
-      }
+        insert(val) {
+          this.arr.push(val)
+        }
 
-      insert(val) {
-        this.arr.push(val)
-      }
+        pop() {
+          return this.arr.shift()
+        }
 
-      pop() {
-        return this.arr.shift()
-      }
+        isEmpty() {
+          return this.arr.length === 0
+        }
 
-      isEmpty() {
-        return this.arr.length === 0;
-      }
+        show() {
+          console.log('show:')
 
-      show() {
-        console.log('show:');
-
-        this.arr.forEach(item => {
-          console.log(item);
-        })
-      }
-    }
-
-    class Node {
-      constructor(val) {
-        this.val = val;
-        this.left = null;
-        this.right = null;
-      }
-    }
-
-    class Tree {
-      constructor() {
-        this.root = null;
-        this.size = 0;
-      }
-
-      // 广度优先遍历
-      levelTravel() {
-        let queue = new Queue(),
-          root = this.root,
-          newArr = [];
-
-        console.log('level travel')
-
-        if (!root) return null;
-
-        queue.insert(root);
-        while (!queue.isEmpty()) {
-          let node = queue.pop();
-          console.log(node.val);
-
-          if (node.left) {
-            queue.insert(node.left)
-          }
-          if (node.right) {
-            queue.insert(node.right)
-          }
+          this.arr.forEach(item => {
+            console.log(item)
+          })
         }
       }
 
-      leftView() {
-        let que = [],
-          newQue = [],
-          root = this.root;
-        console.log('left view')
-        if (!root) return null;
-        que.push(root);
+      class Node {
+        constructor(val) {
+          this.val = val
+          this.left = null
+          this.right = null
+        }
+      }
 
-        while (que.length !== 0) {
-          console.log(que[0].val)
+      class Tree {
+        constructor() {
+          this.root = null
+          this.size = 0
+        }
 
-          while (que.length !== 0) {
-            let node = que.shift();
+        // 广度优先遍历
+        levelTravel() {
+          let queue = new Queue(),
+            root = this.root,
+            newArr = []
+
+          console.log('level travel')
+
+          if (!root) return null
+
+          queue.insert(root)
+          while (!queue.isEmpty()) {
+            let node = queue.pop()
+            console.log(node.val)
 
             if (node.left) {
-              newQue.push(node.left)
+              queue.insert(node.left)
             }
             if (node.right) {
-              newQue.push(node.right)
+              queue.insert(node.right)
+            }
+          }
+        }
+
+        // 广度优先遍历2
+        levelTravel2() {
+          let root = this.root,
+            queue = [],
+            result = [],
+            level = 0
+          if (!root) return []
+
+          queue.push(root)
+          while (queue.length) {
+            let size = queue.length
+            result.push([])
+            while (size--) {
+              const node = queue.shift()
+              result[level].push(node.val)
+
+              if (node.left) queue.push(node.left)
+              if (node.right) queue.push(node.right)
+            }
+            level++
+          }
+
+          return result
+        }
+
+        leftView() {
+          let que = [],
+            newQue = [],
+            root = this.root
+          console.log('left view')
+          if (!root) return null
+          que.push(root)
+
+          while (que.length !== 0) {
+            console.log(que[0].val)
+
+            while (que.length !== 0) {
+              let node = que.shift()
+
+              if (node.left) {
+                newQue.push(node.left)
+              }
+              if (node.right) {
+                newQue.push(node.right)
+              }
+            }
+
+            // let tmp = newQue;
+            // newQue = que;
+            // que = tmp;
+            ;[que, newQue] = [newQue, que]
+          }
+        }
+
+        leftView2() {
+          let root = this.root,
+            queue = [],
+            result = []
+
+          if (!root) return []
+          queue.push(root)
+
+          while (queue.length) {
+            let size = queue.length
+            result.push(queue[0].val)
+            while (size--) {
+              const node = queue.shift()
+              // 左视图，先放左节点
+              if (node.left) queue.push(node.left)
+              if (node.right) queue.push(node.right)
             }
           }
 
-          // let tmp = newQue;
-          // newQue = que;
-          // que = tmp;
-          [que, newQue] = [newQue, que];
+          return result
+        }
+
+        rightView2() {
+          let root = this.root,
+            queue = [],
+            result = []
+
+          if (!root) return []
+          queue.push(root)
+
+          while (queue.length) {
+            let size = queue.length
+            result.push(queue[0].val)
+            while (size--) {
+              const node = queue.shift()
+              // 右视图，先放右节点
+              if (node.right) queue.push(node.right)
+              if (node.left) queue.push(node.left)
+            }
+          }
+
+          return result
+        }
+
+        preTravel() {
+          console.log('pre')
+          this._pre(this.root)
+        }
+
+        _pre(node) {
+          if (node) {
+            console.log(node.val)
+            this._pre(node.left)
+            this._pre(node.right)
+          }
+        }
+
+        midTravel() {
+          console.log('mid')
+          this._mid(this.root)
+        }
+
+        _mid(node) {
+          if (node) {
+            this._mid(node.left)
+            console.log(node.val)
+            this._mid(node.right)
+          }
+        }
+
+        addNode(val) {
+          this.root = this._addChild(this.root, val)
+        }
+
+        _addChild(node, val) {
+          if (!node) {
+            this.size++
+            return new Node(val)
+          }
+
+          if (val < node.val) {
+            node.left = this._addChild(node.left, val)
+          } else if (val > node.val) {
+            node.right = this._addChild(node.right, val)
+          }
+
+          return node
         }
       }
 
-      preTravel() {
-        console.log('pre')
-        this._pre(this.root)
-      }
+      let queue = new Queue()
 
-      _pre(node) {
-        if (node) {
-          console.log(node.val);
-          this._pre(node.left);
-          this._pre(node.right);
-        }
-      }
+      queue.insert(1)
+      queue.insert(2)
+      queue.insert(21)
+      queue.insert(22)
 
-      midTravel() {
-        console.log('mid')
-        this._mid(this.root)
-      }
+      queue.show()
 
-      _mid(node) {
-        if (node) {
-          this._mid(node.left);
-          console.log(node.val);
-          this._mid(node.right);
-        }
-      }
+      queue.pop()
+      queue.show()
 
-      addNode(val) {
-        this.root = this._addChild(this.root, val)
-      }
+      let tree = new Tree()
 
-      _addChild(node, val) {
-        if (!node) {
-          this.size++;
-          return new Node(val)
-        }
+      tree.addNode(5)
+      tree.addNode(1)
+      tree.addNode(2)
+      tree.addNode(8)
+      tree.addNode(6)
+      tree.addNode(7)
+      tree.addNode(9)
 
-        if (val < node.val) {
-          node.left = this._addChild(node.left, val)
-        } else if (val > node.val) {
-          node.right = this._addChild(node.right, val)
-        }
-
-        return node
-      }
-    }
-
-    let queue = new Queue();
-
-    queue.insert(1);
-    queue.insert(2);
-    queue.insert(21);
-    queue.insert(22);
-
-    queue.show();
-
-    queue.pop();
-    queue.show();
-
-
-    let tree = new Tree();
-
-    tree.addNode(5);
-    tree.addNode(1);
-    tree.addNode(2);
-    tree.addNode(8);
-    tree.addNode(6);
-    tree.addNode(7);
-    tree.addNode(9);
-
-    tree.preTravel();
-    tree.midTravel();
-    tree.levelTravel();
-    tree.leftView();
-  </script>
-</body>
-
+      tree.preTravel()
+      tree.midTravel()
+      tree.levelTravel()
+      tree.leftView()
+      console.log('levelTravel2', tree.levelTravel2())
+      console.log('leftView2', tree.leftView2())
+      console.log('rightView2', tree.rightView2())
+    </script>
+  </body>
 </html>
