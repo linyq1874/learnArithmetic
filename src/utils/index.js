@@ -7,6 +7,18 @@ function getArr(length = 10) {
   return result
 }
 
+function timeTaken(fn) {
+  console.time('timeTaken')
+  fn()
+  console.timeEnd('timeTaken')
+}
+
+function isObject(obj) {
+  return Object.prototype.toString.call(obj) === '[object Object]'
+}
+
 module.exports = {
-  getArr
+  getArr,
+  timeTaken,
+  isObject
 }
