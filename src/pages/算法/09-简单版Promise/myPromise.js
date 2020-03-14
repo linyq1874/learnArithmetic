@@ -4,7 +4,7 @@ const PENDING = 'pending',
 
 class MyPromise {
   constructor(executor) {
-    this.state = this.PENDING
+    this.state = PENDING
     this.value = null
     this.reason = null
 
@@ -56,11 +56,20 @@ class MyPromise {
 }
 
 // console.log(12)
-// Promise.resolve(2).then(res => {
-//   console.log(res)
-// })
-new MyPromise(res => {
-  res(5)
-}).then(res => {
+Promise.resolve(2).then(res => {
   console.log(res)
 })
+
+Promise.resolve(444)
+  .then(() => 555)
+  .then(666)
+  .then(res => {
+    console.log('then then', res)
+  })
+new MyPromise(res => {
+  res(5)
+})
+  // .then(2)
+  .then(res => {
+    console.log('my...', res)
+  })
