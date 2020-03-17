@@ -3,6 +3,10 @@ class Dep {
     this.subs = []
   }
 
+  /**
+   * 添加订阅者
+   * @param {Watch} sub
+   */
   addSub(sub) {
     this.subs.push(sub)
   }
