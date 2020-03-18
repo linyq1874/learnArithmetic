@@ -11,6 +11,7 @@ function observer(obj) {
 function react(obj, key, val) {
   observer(val)
 
+  /*在闭包内存储一个Dep对象*/
   const dep = new Dep()
 
   Object.defineProperty(obj, key, {

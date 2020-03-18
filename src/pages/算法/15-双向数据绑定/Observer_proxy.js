@@ -3,6 +3,7 @@ function observer(target) {
     return target // 这里要注意返回target 否则获取不到
   }
 
+  /*在闭包内存储一个Dep对象*/
   const dep = new Dep()
 
   const handler = {
