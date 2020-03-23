@@ -161,3 +161,10 @@ const threeSum = nums => {
 const arr2 = [-1, 0, 1, 2, -1, -4]
 
 console.log('threeSum:', threeSum(arr2))
+
+// 数组生成10个数
+const arr10_1 = Array.from({ length: 10 }, () => 1)
+
+const arr10_2 = Array.apply(null, { length: 10 }).map(() => 1)
+
+console.log(arr10_1, arr10_2)

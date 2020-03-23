@@ -7,41 +7,18 @@
 
 //  方法一：
 const maxSlidingWindow = (nums, k) => {
+  // 异常处理
   if (nums.length === 0 || !k) return []
-
-  if (k > nums.length) return [Math.max(...nums)]
-
   let window = [],
     res = []
-
-  nums.forEach((num, index) => {
-    if (window.length && num > window[0]) window.pop()
-
-    if (!window.length) window.push(num)
-    if (index + 1 >= k) {
-      res.push(window[0])
-    }
-  })
-
-  return res
-}
-// 方法二：
-const maxSlidingWindow2 = (nums, k) => {
-  if (nums.length === 0 || !k) return []
-
-  if (k > nums.length) return [Math.max(...nums)]
-
-  let max = nums[0],
-    res = []
-
-  nums.forEach((num, index) => {
-    max = Math.max(max, num)
-
-    if (index + 1 >= k) {
-      res.push(max)
-    }
-  })
-
+  for (let i = 0; i < nums.length; i++) {
+    // 先把滑动窗口之外的踢出
+    if (window[0] !== undefined && window[0] <= i - k) window.shift()
+    // 保证队首是最大的
+    while (nums[window[window.length - 1]] <= nums[i]) window.pop()
+    window.push(i)
+    if (i >= k - 1) res.push(nums[window[0]])
+  }
   return res
 }
 
@@ -49,4 +26,3 @@ const nums = [1, 3, -1, -3, 5, 3, 6, 7]
 const k = 20
 
 console.log(maxSlidingWindow(nums, k))
-console.log(maxSlidingWindow2(nums, 3))

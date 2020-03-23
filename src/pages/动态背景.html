@@ -5,10 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
+
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      .row {
+        box-sizing: border-box;
+        width: 25%;
+        height: 100px;
+        float: left;
+        background: #900;
+        background-clip: content-box;
+      }
+
+      .row + .row {
+        padding-left: 10px;
+      }
+
+      .container::before {
+        display: table;
+        content: '';
+      }
+
+      .container::after {
+        display: table;
+        content: '';
+        clear: both;
+      }
+    </style>
   </head>
+
   <body>
+    <div class="container">
+      <div class="row">第一列</div>
+      <div class="row">第二列</div>
+      <div class="row">第三列</div>
+      <div class="row">第四列</div>
+    </div>
+
     <canvas id="c_n26" width="100%" height="100%" style="position: fixed;top: 0px;left: 0px;z-index: -1;opacity: 1;"></canvas>
-    <span style="position: absolute; left: 50%; top: 50%; font-size: 30px;">动态背景</span>
     <script src="../utils/canvas-nest.min.js"></script>
   </body>
 </html>

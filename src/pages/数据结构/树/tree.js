@@ -308,22 +308,78 @@ class Tree {
     return validate(root.left, root.right)
   }
 
-  getMirror() {
-    const root = this.root
+  // 镜像 迭代版本
+  reflection2() {
+    const queue = [],
+      root = this.root
+    if (!root) return true
 
-    const help = node => {
-      if (node) {
-        ;[node.left, node.right] = [node.right, node.left]
-        help(node.right)
-        help(node.left)
+    queue.push(root)
+    while (queue.length) {
+      if (!this._reflection2(queue)) {
+        return false
+      }
+      let size = queue.length
+      while (size--) {
+        const node = queue.shift()
+        // node 不为空才推进去，不存在左右子树，则推入null
+        if (node) {
+          queue.push(node.left)
+          queue.push(node.right)
+        }
       }
     }
 
-    help(root)
+    return true
+  }
+
+  _reflection2(queue) {
+    let left = 0,
+      right = queue.length - 1
+    while (left < right) {
+      const l = queue[left],
+        r = queue[right]
+      if (!l || !r) {
+        if (l !== r) return false
+      } else {
+        if (l.val !== r.val) {
+          return false
+        }
+      }
+      left++
+      right--
+    }
+
+    return true
+  }
+
+  getMirror() {
+    const root = this.root
+
+    // const help = node => {
+    //   if (node) {
+    //     ;[node.left, node.right] = [node.right, node.left]
+    //     help(node.right)
+    //     help(node.left)
+    //   }
+    // }
+
+    // help(root)
+    // return root
+
+    let stack = [root]
+    while (stack.length > 0) {
+      let cur = stack.pop()
+      if (cur === null) continue
+      ;[cur.left, cur.right] = [cur.right, cur.left]
+      stack.push(cur.right)
+      stack.push(cur.left)
+    }
     return root
   }
 
   // 根节点到子节点的所有路径
+  // allPath: [ '3->1->0', '3->1->2', '3->5->4', '3->5->6->8->7' ]
   allPath() {
     const root = this.root,
       path = [],
@@ -334,15 +390,14 @@ class Tree {
     const dfs = node => {
       if (!node) return null
 
+      // 前序遍历
       path.push(node)
-
-      // 后序遍历
-      dfs(node.left)
-      dfs(node.right)
-
       if (!node.left && !node.right) {
         result.push(path.map(item => item.val).join('->'))
       }
+
+      dfs(node.left)
+      dfs(node.right)
 
       // 注意每访问完一个节点记得把它从path中删除，达到回溯效果
       path.pop()
@@ -682,6 +737,7 @@ const tree4 = new Tree()
 tree4.levelAddNode(avlNodes)
 console.log('isAVL:', tree4.isAVL())
 console.log('reflection:', tree4.reflection())
+console.log('reflection2:', tree4.reflection2())
 
 const sortArr = [-10, -3, 0, 5, 9, 10, 25, 40]
 

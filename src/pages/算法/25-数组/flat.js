@@ -30,6 +30,16 @@ const flatten3 = arr => {
 
 console.log('flatten3', flatten3([...arr]))
 
+const flatten4 = arr => {
+  while (arr.some(item => Array.isArray(item))) {
+    arr = [].concat(...arr)
+  }
+
+  return arr
+}
+
+console.log('flatten4', flatten4([...arr]))
+
 /**
  * 指定深度的数组扁平化
  */
