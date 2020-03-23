@@ -278,19 +278,11 @@ class Tree {
     return this._minDepth(this.root)
   }
   _minDepth(node) {
-    if (!node) return 0
-    if (node.left && node.right) {
-      return Math.min(this._minDepth(node.left), this._minDepth(node.right)) + 1
-    }
-    if (node.left) {
-      return this._minDepth(node.left) + 1
-    }
-    if (node.right) {
-      return this._minDepth(node.right) + 1
-    }
+    if(!node) return 0
+    if(!node.left) return this._minDepth(node.right) + 1
+    if(!node.right) return this._minDepth(node.left) + 1
 
-    // 只有一个根节点
-    return 1
+    return Math.min(this._minDepth(node.left), this._minDepth(node.right)) + 1
   }
 
   // 镜像
@@ -316,6 +308,7 @@ class Tree {
 
     queue.push(root)
     while (queue.length) {
+      // ! 无论是左视图还是右视图，还是判断镜像，要在循环size之前做一些操作
       if (!this._reflection2(queue)) {
         return false
       }
@@ -372,8 +365,8 @@ class Tree {
       let cur = stack.pop()
       if (cur === null) continue
       ;[cur.left, cur.right] = [cur.right, cur.left]
-      stack.push(cur.right)
       stack.push(cur.left)
+      stack.push(cur.right)
     }
     return root
   }
@@ -431,9 +424,12 @@ class Tree {
       path.push(node)
       count += node.val
 
-      if (!node.left && !node.right && count === sum) {
+      if (count === sum) {
         result.push(path.map(item => item.val).join('->'))
       }
+      // if (!node.left && !node.right && count === sum) {
+      //   result.push(path.map(item => item.val).join('->'))
+      // }
 
       dfs(node.left, count)
       dfs(node.right, count)
@@ -445,6 +441,38 @@ class Tree {
     dfs(root, 0)
 
     return result
+  }
+
+  pathSum(sum){
+    const root = this.root,result = [],path = []
+    if(!root ) return []
+
+    const help = (node, count) => {
+        if(!node) return 
+
+        // 让每个节点都从头开始继续向下遍历
+        if(!node.isVisited) {
+            node.isVisited = true 
+            node.left && help(node.left, 0)
+            node.right && help(node.right, 0)
+        } 
+        path.push(node)
+
+        count += node.val
+        
+        if(count === sum) {
+            result.push(path.map(item => item.val).join('->'))
+        }
+
+        node.left && help(node.left, count)
+        node.right && help(node.right, count)
+        path.pop()
+    }
+
+    help(root, 0)
+
+    return result
+
   }
 
   // 最近公共祖先
@@ -610,11 +638,11 @@ class Tree {
     const help = (prev, mid) => {
       if (!prev || !prev.length) return null
 
-      const value = prev[0]
-      if (prev.length === 1) return new Node(value)
+      const head = prev[0]
+      if (prev.length === 1) return new Node(head)
 
-      const node = new Node(value)
-      const index = mid.indexOf(value)
+      const node = new Node(head)
+      const index = mid.indexOf(head)
 
       const prevLeft = prev.slice(1, index + 1)
       const prevRight = prev.slice(index + 1)
@@ -713,7 +741,7 @@ const p = random()
 const q = random()
 console.log('p:', p, 'q:', q, 'commonAncestor:', tree.commonAncestor(p, q))
 
-const roots = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4, null, 10, null, null, 9, 12, 11]
+const roots = [3, 5, 1, 6, 2, 0, 8, null, null, -2, 1, null, 10, null, null, 9, 12, 11]
 
 const tree2 = new Tree()
 
@@ -721,7 +749,8 @@ tree2.levelAddNode(roots)
 
 console.log('tree2:', tree2.levelTravel())
 console.log('tree2 AllPath:', tree2.allPath())
-console.log('tree2 allSumPath:', tree2.allSumPath(12))
+console.log('tree2 allSumPath:', tree2.allSumPath(8))
+console.log('tree2 pathSum:', tree2.pathSum(8))
 console.log('tree2maxLength:', tree2.maxLength())
 
 const roots2 = [-10, 9, 20, null, null, 15, 7]
