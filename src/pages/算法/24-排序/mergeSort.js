@@ -38,14 +38,7 @@ function merge(left, right) {
   }
 
   // 还剩下数组时，直接连接起来
-  if (left.length) {
-    result = result.concat(left)
-  }
-  if (right.length) {
-    result = result.concat(right)
-  }
-
-  return result
+  return result.concat(left.length ? left : right)
 }
 
 function getArr(length = 10) {
