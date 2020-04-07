@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 id="name">{{ name }}</h1>
+    <input type="text" />
+    <button onclick="changeInput()">change data</button>
+
+    <script src="./Dep.js"></script>
+    <!-- <script src="./Observer.js"></script> -->
+    <script src="./Observer_proxy.js"></script>
+    <script src="./Watcher.js"></script>
+
+    <script>
+      function myVue(data, el, exp) {
+        // Object.defineProperty写法
+        // this.data = data
+        // observer(data)
+
+        // Proxy写法
+        this.data = observer(data)
+
+        el.innerHTML = this.data[exp]
+
+        new Watcher(this, exp, value => {
+          el.innerHTML = value
+        })
+
+        return this
+      }
+
+      const ele = document.querySelector('#name')
+      const input = document.querySelector('input')
+
+      const vue = new myVue(
+        {
+          name: 'hello world'
+        },
+        ele,
+        'name'
+      )
+
+      input.oninput = e => {
+        vue.data.name = e.target.value
+      }
+
+      function changeInput() {
+        vue.data.name = 'lin'
+      }
+    </script>
+  </body>
+</html>
