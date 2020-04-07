@@ -150,9 +150,10 @@ class Tree {
   }
 
   nextTravel() {
-    console.log('nextTravel:')
     const result = this._nextTravel(this.root)
-    console.log(result)
+    console.log('nextTravel:', result)
+    console.log('非递归')
+    this.$nextTravel(this.root)
   }
 
   _nextTravel(node, result = []) {
@@ -165,6 +166,34 @@ class Tree {
 
     // console.log(result);
     return result
+  }
+
+  $nextTravel(node) {
+    const stack = [],
+      result = []
+    let last = null,
+      current = node
+
+    while (current || stack.length) {
+      while (current) {
+        stack.push(current)
+        current = current.left
+      }
+
+      current = stack[stack.length - 1]
+
+      if (!current.right || current.right === last) {
+        current = stack.pop()
+        result.push(current.val)
+        last = current
+        current = null
+      } else {
+        current = current.right
+      }
+    }
+
+    // return result
+    console.log(result)
   }
 
   levelTravel() {
@@ -264,6 +293,43 @@ class Tree {
     return result
   }
 
+  /**
+   * 在二叉树中，根节点位于深度 0 处，每个深度为 k 的节点的子节点位于深度 k+1 处。
+   * 如果二叉树的两个节点深度相同，但父节点不同，则它们是一对堂兄弟节点。
+   * 我们给出了具有唯一值的二叉树的根节点 root，以及树中两个不同节点的值 x 和 y。
+   * 只有与值 x 和 y 对应的节点是堂兄弟节点时，才返回 true。否则，返回 false。
+
+   * 来源：力扣（LeetCode）
+   * 链接：https://leetcode-cn.com/problems/cousins-in-binary-tree
+   * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+   * @param {TreeNode} root
+   * @param {number} x
+   * @param {number} y
+   * @return {boolean}
+   */
+  isCousins(x, y) {
+    const root = this.root
+    const queue = [[root, null]]
+    if (!root || root === x || root === y) return false
+    while (queue.length) {
+      let size = queue.length
+      const filters = queue.filter(([node]) => node.val === x || node.val === y)
+      if (filters.length === 2 && filters[0][1] !== filters[1][1]) {
+        return true
+      }
+      while (size--) {
+        const [node] = queue.shift()
+
+        if (node) {
+          node.left && queue.push([node.left, node])
+          node.right && queue.push([node.right, node])
+        }
+      }
+    }
+
+    return false
+  }
+
   // 最大深度也可以用层序遍历的level获取
   maxDepth() {
     return this._maxDepth(this.root)
@@ -278,9 +344,9 @@ class Tree {
     return this._minDepth(this.root)
   }
   _minDepth(node) {
-    if(!node) return 0
-    if(!node.left) return this._minDepth(node.right) + 1
-    if(!node.right) return this._minDepth(node.left) + 1
+    if (!node) return 0
+    if (!node.left) return this._minDepth(node.right) + 1
+    if (!node.right) return this._minDepth(node.left) + 1
 
     return Math.min(this._minDepth(node.left), this._minDepth(node.right)) + 1
   }
@@ -333,6 +399,7 @@ class Tree {
       const l = queue[left],
         r = queue[right]
       if (!l || !r) {
+        // 一个为null，一个不为null
         if (l !== r) return false
       } else {
         if (l.val !== r.val) {
@@ -424,12 +491,9 @@ class Tree {
       path.push(node)
       count += node.val
 
-      if (count === sum) {
+      if (!node.left && !node.right && count === sum) {
         result.push(path.map(item => item.val).join('->'))
       }
-      // if (!node.left && !node.right && count === sum) {
-      //   result.push(path.map(item => item.val).join('->'))
-      // }
 
       dfs(node.left, count)
       dfs(node.right, count)
@@ -443,36 +507,41 @@ class Tree {
     return result
   }
 
-  pathSum(sum){
-    const root = this.root,result = [],path = []
-    if(!root ) return []
+  /**
+   * 和为某一值的所有路径，路径可以不经过根节点
+   * @param {Number} sum
+   */
+  pathSum(sum) {
+    const root = this.root,
+      result = [],
+      path = []
+    if (!root) return []
 
     const help = (node, count) => {
-        if(!node) return 
+      if (!node) return
 
-        // 让每个节点都从头开始继续向下遍历
-        if(!node.isVisited) {
-            node.isVisited = true 
-            node.left && help(node.left, 0)
-            node.right && help(node.right, 0)
-        } 
-        path.push(node)
+      // 让每个节点都从头开始继续向下遍历
+      if (!node.isVisited) {
+        node.isVisited = true
+        node.left && help(node.left, 0)
+        node.right && help(node.right, 0)
+      }
+      path.push(node)
 
-        count += node.val
-        
-        if(count === sum) {
-            result.push(path.map(item => item.val).join('->'))
-        }
+      count += node.val
 
-        node.left && help(node.left, count)
-        node.right && help(node.right, count)
-        path.pop()
+      if (count === sum) {
+        result.push(path.map(item => item.val).join('->'))
+      }
+
+      node.left && help(node.left, count)
+      node.right && help(node.right, count)
+      path.pop()
     }
 
     help(root, 0)
 
     return result
-
   }
 
   // 最近公共祖先
@@ -525,6 +594,7 @@ class Tree {
     const maxDepth = node => {
       if (!node) return 0
 
+      // !后序遍历
       let left = node.left ? maxDepth(node.left) + 1 : 0
       let right = node.right ? maxDepth(node.right) + 1 : 0
 
@@ -562,6 +632,7 @@ class Tree {
     const maxSum = node => {
       if (!node) return 0
 
+      // !后序遍历
       // 最大值为0，说明左子树或者右字数数值为负值，不参与计算
       let left = Math.max(maxSum(node.left), 0)
       let right = Math.max(maxSum(node.right), 0)
@@ -627,6 +698,42 @@ class Tree {
   }
 
   /**
+   * 判断后序遍历能否构成二叉搜索树，每个节点数据不一样
+   * !二叉搜索树按顺序排序，则左子树小于根节点，右子树大于根节点,递归左右子树
+   * @param {Array} seq
+   * @returns boolean
+   */
+  VerifySequenceOfBST(seq) {
+    const len = seq.length
+    if (seq && len) {
+      const root = seq[len - 1]
+
+      // 以下操作，记得都得小于len-1，排除掉根节点，i要单独定义，才能被第二个for循环使用
+      let i
+      for (i = 0; i < len - 1; i++) {
+        // 大于，则说明到达右子树
+        if (seq[i] > root) break
+      }
+      let j
+      for (j = i; j < len - 1; j++) {
+        // 小于，则说明无法构成二叉搜索树
+        if (seq[i] < root) return false
+      }
+
+      let left = true
+      if (i > 0) {
+        left = this.VerifySequenceOfBST(seq.slice(0, i))
+      }
+      let right = true
+      if (i < len - 1) {
+        right = this.VerifySequenceOfBST(seq.slice(i, len - 1))
+      }
+
+      return left && right
+    }
+  }
+
+  /**
    * 输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。
    * 假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
    * 例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，
@@ -641,7 +748,6 @@ class Tree {
       const head = prev[0]
       if (prev.length === 1) return new Node(head)
 
-      const node = new Node(head)
       const index = mid.indexOf(head)
 
       const prevLeft = prev.slice(1, index + 1)
@@ -650,6 +756,7 @@ class Tree {
       const midLeft = mid.slice(0, index)
       const midRight = mid.slice(index + 1)
 
+      const node = new Node(head)
       node.left = help(prevLeft, midLeft)
       node.right = help(prevRight, midRight)
 
@@ -753,12 +860,13 @@ console.log('tree2 allSumPath:', tree2.allSumPath(8))
 console.log('tree2 pathSum:', tree2.pathSum(8))
 console.log('tree2maxLength:', tree2.maxLength())
 
-const roots2 = [-10, 9, 20, null, null, 15, 7]
+const roots2 = [1, 2, 3, null, 4, null, 5]
 
 const tree3 = new Tree()
 
 tree3.levelAddNode(roots2)
-console.log('tree3maxSum:', tree3.maxPathSum())
+console.log('tree3 maxSum:', tree3.maxPathSum())
+console.log('tree3 isCousins:', tree3.isCousins(5, 4))
 
 const avlNodes = [2, 1, 1, 4, 5, 5, 4]
 const tree4 = new Tree()
@@ -773,6 +881,8 @@ const sortArr = [-10, -3, 0, 5, 9, 10, 25, 40]
 const tree5 = new Tree()
 tree5.sortedArrayToBST(sortArr)
 console.log('tree5 levelTravel:', tree5.levelTravel())
+const postTravel = [1, 2, 3, 5, 6, 7, 8, 9, 10, 4]
+console.log('tree5 VerifySequenceOfBST:', tree5.VerifySequenceOfBST(postTravel))
 
 const tree6 = new Tree()
 const nodes6 = [8, 10, 6, 11, 9, 7, 5]
