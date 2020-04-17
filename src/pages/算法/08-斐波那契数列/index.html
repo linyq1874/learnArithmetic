@@ -1,80 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-
-<body>
-  斐波那契数列
-  f(0) = f(1) = 1;
-  f(n) = f(n-1) + f(n-2)
-  <script>
-    function* fibonacci() {
-      let [prev, cur] = [0, 1];
-      for (;;) {
-        [prev, cur] = [cur, prev + cur];
-        yield cur;
+  <body>
+    斐波那契数列 f(0) = f(1) = 1; f(n) = f(n-1) + f(n-2)
+    <script>
+      function* fibonacci() {
+        let [prev, cur] = [0, 1]
+        for (;;) {
+          ;[prev, cur] = [cur, prev + cur]
+          yield cur
+        }
       }
-    }
 
-    // for (let n of fibonacci()) {
-    //   if (n > 100) break;
-    //   console.log(n);
-    // }
+      // for (let n of fibonacci()) {
+      //   if (n > 100) break;
+      //   console.log(n);
+      // }
 
-    function fibonacci1(n) {
-      if (n <= 1) {
-        return 1
+      function fibonacci1(n) {
+        if (n <= 1) {
+          return 1
+        }
+        return fibonacci1(n - 1) + fibonacci1(n - 2)
       }
-      return fibonacci1(n - 1) + fibonacci1(n - 2)
-    }
 
-    function fibonacci2(n, ac1 = 1, ac2 = 1) {
-      if (n <= 1) {
+      function fibonacci2(n, ac1 = 1, ac2 = 1) {
+        if (n <= 1) {
+          return ac2
+        }
+        return fibonacci2(n - 1, ac2, ac1 + ac2)
+      }
+
+      function fibonacci3(n) {
+        if (n <= 1) {
+          return 1
+        }
+        let ac1 = 1,
+          ac2 = 1
+        for (let i = 2; i < n; i++) {
+          ;[ac1, ac2] = [ac2, ac1 + ac2]
+        }
         return ac2
-      };
-      return fibonacci2(n - 1, ac2, ac1 + ac2);
-    }
-
-    function fibonacci3(n) {
-      if (n <= 1) {
-        return 1;
       }
-      let ac1 = 1,
-        ac2 = 1;
-      for (let i = 2; i < n; i++) {
-        [ac1, ac2] = [ac2, ac1 + ac2];
+
+      /**
+        带缓存，使用闭包
+      */
+      function getFib() {
+        let F = []
+
+        return function(n) {
+          const len = F.length
+          let i
+          if (!len) {
+            F[0] = 0
+            F[1] = 1
+
+            i = 2
+          } else if (n <= len) {
+            return F[n]
+          } else {
+            i = len
+          }
+          while (i <= n) {
+            F[i] = F[i - 1] + F[i - 2]
+            i++
+          }
+
+          return F[n]
+        }
       }
-      return ac2;
-    }
 
+      const myFib = getFib()
+      console.time('my1')
+      console.log('my', myFib(5))
+      console.timeEnd('my1')
 
+      console.time('my2')
+      console.log('my', myFib(4))
+      console.timeEnd('my2')
 
+      console.time('my3')
+      console.log('my', myFib(10))
+      console.timeEnd('my3')
 
-    for (var i = 0; i <= 10; i++) {
+      console.time('my4')
+      console.log('my', myFib(4))
+      console.timeEnd('my4')
 
-      console.log('fibonacci1', fibonacci1(i));
-      // console.log('fibonacci2', fibonacci2(i));
-      // console.log('fibonacci3', fibonacci3(i));
-    }
-
-    function fib(n) {
-      let array = new Array(n + 1).fill(null)
-      array[0] = 0
-      array[1] = 1
-      for (let i = 2; i <= n; i++) {
-        array[i] = array[i - 1] + array[i - 2]
+      for (var i = 0; i <= 10; i++) {
+        console.log('fibonacci1', fibonacci1(i))
+        // console.log('fibonacci2', fibonacci2(i));
+        // console.log('fibonacci3', fibonacci3(i));
       }
-      return array
-    }
 
-    console.log(fib(10));
-    
-  </script>
-</body>
+      function fib(n) {
+        let array = new Array(n + 1).fill(null)
+        array[0] = 0
+        array[1] = 1
+        for (let i = 2; i <= n; i++) {
+          array[i] = array[i - 1] + array[i - 2]
+        }
+        return array
+      }
 
+      console.log(fib(10))
+    </script>
+  </body>
 </html>
