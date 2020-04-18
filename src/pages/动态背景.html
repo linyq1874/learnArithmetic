@@ -35,15 +35,36 @@
         content: '';
         clear: both;
       }
+      .box {
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        height: 0;
+        padding-bottom: 50%;
+        background: #000;
+        /* display: flex;
+        justify-content: center;
+        align-items: center; */
+      }
+      .text {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
     </style>
   </head>
 
   <body>
-    <div class="container">
+    <!-- <div class="container">
       <div class="row">第一列</div>
       <div class="row">第二列</div>
       <div class="row">第三列</div>
       <div class="row">第四列</div>
+    </div> -->
+
+    <div class="box">
+      <span class="text">A</span>
     </div>
 
     <canvas id="c_n26" width="100%" height="100%" style="position: fixed;top: 0px;left: 0px;z-index: -1;opacity: 1;"></canvas>

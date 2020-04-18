@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <button class="button">click me</button> -->
+    打开开发者工具 performance ,然后是更多工具的performance 的monitor
+
+    <a
+      target="_blank"
+      href="https://mp.weixin.qq.com/s?__biz=MzI4OTI0NDc2NQ==&mid=2247483944&idx=1&sn=2693ec792d5afd17ba7b073aa07ec6bb&chksm=ec33511adb44d80c3a11cbf1ff98b4bd88f06da88e0c1580152615acb49bccb330ccbe39bb13&mpshare=1&scene=24&srcid=&sharer_sharetime=1586915081106&sharer_shareid=6b688a0451af5362b13e5750858d4083&key=c85f82b7d4b7719a445d0e3b3ba94722d5499c6ca265a0c50a4177eb90e8be44053a98ad7a8814ed371dc997133ee8c7786bf419158fcd1a9eaa873893609fed40adec24dd99431cc4c85f9a39329167&ascene=14&uin=MTYzMjc0Nzk1&devicetype=Windows+10&version=62080079&lang=zh_CN&exportkey=AfxftVSiKgpBOrcPTHWQ4mE%3D&pass_ticket=QL5YrqyjGAzrqhGWVwJv8QrrXHSWWle3ht4epePxXM8%3D"
+    >
+      参考
+    </a>
+
+    <script>
+      // const startBtn = document.querySelector('.button')
+      // var arr = []
+      // startBtn.addEventListener('click', () => {
+      //   var a = new Array(100000).fill(1)
+      //   var b = new Array(20000).fill(1)
+      //   arr.push(b)
+      // })
+
+      var t = null
+      var replaceThing = function() {
+        var o = t
+        // var unused = function() {
+        //   if (o) {
+        //     console.log('hi')
+        //     o = null
+        //   }
+        // }
+
+        t = {
+          longStr: new Array(100000).fill('*'),
+          someMethod: function() {
+            console.log(1)
+          }
+        }
+      }
+      setInterval(replaceThing, 1000)
+    </script>
+  </body>
+</html>
