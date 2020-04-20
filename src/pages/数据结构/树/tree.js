@@ -314,6 +314,7 @@ class Tree {
     while (queue.length) {
       let size = queue.length
       const filters = queue.filter(([node]) => node.val === x || node.val === y)
+      if (filters.length === 1) return false
       if (filters.length === 2 && filters[0][1] !== filters[1][1]) {
         return true
       }
