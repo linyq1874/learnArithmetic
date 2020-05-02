@@ -208,7 +208,7 @@ function quickSort2(arr) {
     }
   }
 
-  return quickSort2(minList).concat(p, quickSort2(maxList))
+  return quickSort2(maxList).concat(p, quickSort2(minList))
 }
 console.time('quickSort2')
 console.log('quickSort2', quickSort2([...a]))
@@ -360,4 +360,32 @@ const multiply = (num1, num2) => {
   return res.reverse().join('')
 }
 
-console.log('multiply', multiply('23784678091370408971329048718239749083237846780913704089713290487182397490832378467809137040897132904871823974908323784678091370408971329048718239749083', '3782647863278468012934670237846780913704089713290487182397490832378467809137040897132904871823974908323784678091370408971329048718239749083'))
+console.log(
+  'multiply',
+  multiply(
+    '23784678091370408971329048718239749083237846780913704089713290487182397490832378467809137040897132904871823974908323784678091370408971329048718239749083',
+    '3782647863278468012934670237846780913704089713290487182397490832378467809137040897132904871823974908323784678091370408971329048718239749083'
+  )
+)
+
+console.log('-----------')
+
+function reverse(str) {
+  // if (!str.length) return ''
+
+  // str = Array.isArray(str) ? str : str.split('')
+
+  // return str.pop() + reverse(str)
+
+  const help = len => {
+    if (len < 0) return ''
+
+    return str[len] + help(len - 1)
+  }
+
+  return help(str.length - 1)
+}
+
+console.log(reverse(''))
+console.log(reverse('a'))
+console.log(reverse('abc'))
