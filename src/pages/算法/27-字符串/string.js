@@ -389,3 +389,30 @@ function reverse(str) {
 console.log(reverse(''))
 console.log(reverse('a'))
 console.log(reverse('abc'))
+/**
+ * 0 -> A
+ * ...
+ * 25 -> Z
+ * 26 -> AA
+ * ...
+ */
+
+const convert = n => {
+  let res = ''
+
+  n++
+  while (n) {
+    let rest = n % 26
+    n = (n / 26) >> 0
+    if (rest === 0) {
+      rest = 26
+      n--
+    }
+
+    res = String.fromCharCode(rest + 64) + res
+  }
+
+  return res
+}
+
+console.log(convert(18277))
