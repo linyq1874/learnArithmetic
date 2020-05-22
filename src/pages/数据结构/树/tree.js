@@ -309,6 +309,7 @@ class Tree {
    */
   isCousins(x, y) {
     const root = this.root
+    // 当前节点和父节点
     const queue = [[root, null]]
     if (!root || root === x || root === y) return false
     while (queue.length) {

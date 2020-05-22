@@ -208,7 +208,7 @@ function quickSort2(arr) {
     }
   }
 
-  return quickSort2(minList).concat(p, quickSort2(maxList))
+  return quickSort2(maxList).concat(p, quickSort2(minList))
 }
 console.time('quickSort2')
 console.log('quickSort2', quickSort2([...a]))
@@ -368,6 +368,27 @@ console.log(
   )
 )
 
+console.log('-----------')
+
+function reverse(str) {
+  // if (!str.length) return ''
+
+  // str = Array.isArray(str) ? str : str.split('')
+
+  // return str.pop() + reverse(str)
+
+  const help = len => {
+    if (len < 0) return ''
+
+    return str[len] + help(len - 1)
+  }
+
+  return help(str.length - 1)
+}
+
+console.log(reverse(''))
+console.log(reverse('a'))
+console.log(reverse('abc'))
 /**
  * 0 -> A
  * ...
