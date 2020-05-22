@@ -111,5 +111,81 @@ target.target = target
 // })
 
 // console.log(cloneDeep1(target))
-console.log(cloneDeep(target))
+// console.log(cloneDeep(target))
 // console.log(clone(target))
+
+class CreateState {
+  constructor(target) {
+    this.modified = false
+    this.target = target
+    this.copy = null
+  }
+
+  get(key) {
+    if (!this.modified) return this.target[key]
+    return this.copy[key]
+  }
+
+  set(key, value) {
+    if (!this.modified) this._markChange()
+    return (this.copy[key] = value)
+  }
+
+  _markChange() {
+    if (!this.modified) {
+      this.modified = true
+      this.copy = this._shallowCopy(this.target)
+    }
+  }
+
+  _shallowCopy(target) {
+    if (Array.isArray(target)) {
+      return [...target]
+    }
+    if (target.__proto__ === undefined) {
+      return Object.assign(Object.create(null), target)
+    }
+
+    return Object.assign({}, target)
+  }
+}
+const STATE = Symbol('state')
+
+const handler = {
+  get(target, key) {
+    if (key === STATE) return target
+    return target.get(key)
+  },
+  set(target, key, value) {
+    return target.set(key, value)
+  }
+}
+const produce = (state, producer = v => v) => {
+  const store = new CreateState(state)
+
+  const proxy = new Proxy(store, handler)
+  producer(proxy)
+
+  // console.log('proxy', proxy)
+  const newState = proxy[STATE]
+  // console.log('newState', newState)
+  if (newState.modified) return newState.copy
+  return newState.target
+}
+
+const state = [
+  {
+    name: 'lin',
+    age: 23
+  }
+]
+
+const next = produce(state)
+
+next.push({
+  name: 'hh'
+})
+next.push({
+  name: 'hh2'
+})
+console.log('produce', state, next)
