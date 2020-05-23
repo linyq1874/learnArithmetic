@@ -50,9 +50,18 @@ class MyPromise {
     }
   }
 
+  /*
+  resolvePromise 函数即为根据x 的值来决定bridgePromise的状态的函数
+  也即标准中的[Promise Resolution Procedure](https://promisesaplus.com/#point-47)
+  x为`bridgePromise = promise1.then(onResolved, onRejected)`里`onResolved/onRejected`的返回值
+  `resolve`和`reject`实际上是`bridgePromise`的`executor`的两个实参，因为很难挂在其它的地方，所以一并传进来。
+  相信各位一定可以对照标准把标准转换成代码，这里就只标出代码在标准中对应的位置，只在必要的地方做一些解释
+*/
   _resolvePromise(bridgePromise, x, resolve, reject) {
     if (x instanceof MyPromise) {
       // 拆解这个 promise ，直到返回值不为 promise 为止
+      // 如果x的状态还没有确定，那么它是有可能被一个thenable决定最终状态和值的
+      // 所以这里需要做一下处理，而不能一概的以为它会被一个“正常”的值resolve
       if (x.state === PENDING) {
         x.then(
           res => {
@@ -67,12 +76,17 @@ class MyPromise {
       }
     } else {
       // 非 Promise 的话直接 resolve 即可
+      // 但如果这个Promise的状态已经确定了，那么它肯定有一个“正常”的值，而不是一个thenable，所以这里直接取它的状态
       resolve(x)
     }
   }
 
   then(onFulled, onRejected) {
-    // 参数不传的情况做判断: 给默认值
+    /**
+     * 参数不传的情况做判断: 给默认值,实现透传
+     * 如：Promise.resolve(4).then().catch().then(console.log)
+     * 是方法则直接使用，不是则透传
+     */
     onFulled = typeof onFulled === 'function' ? onFulled : v => v
     onRejected =
       typeof onRejected === 'function'
@@ -107,6 +121,10 @@ class MyPromise {
     if (this.state === RESOLVE) {
       return (bridgePromise = new MyPromise((resolve, reject) => {
         try {
+          /**
+           * 当 onFulled = () => {}
+           * 则 x === undefined
+           */
           let x = onFulled(this.value)
           this._resolvePromise(bridgePromise, x, resolve, reject)
         } catch (e) {
@@ -213,3 +231,13 @@ new MyPromise((res, rej) => {
   .catch(err => {
     console.log('err', err)
   })
+
+Promise.resolve(4)
+  .then()
+  .then(console.log)
+Promise.resolve(4)
+  .then({})
+  .then(console.log)
+Promise.resolve(4)
+  .then(() => {})
+  .then(console.log)

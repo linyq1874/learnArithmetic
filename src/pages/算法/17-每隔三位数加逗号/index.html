@@ -1,34 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <img src="" alt="img" title="img" />
+    <script>
+      function num_format(num) {
+        var num = (num || 0).toString(),
+          result = ''
 
-  <img src="" alt="img" title='img'>
-  <script>
-  
-    function num_format(num) {
-      var num = (num || 0).toString(),
-        result = '';
+        while (num.length > 3) {
+          result = ',' + num.slice(-3) + result
+          num = num.slice(0, num.length - 3)
+        }
 
-      while(num.length > 3) {
-        result = ','+num.slice(-3) + result;
-        num = num.slice(0, num.length - 3)
+        if (num) {
+          result = num + result
+        }
+
+        return result
       }
 
-      if(num) {
-        result = num + result;
-      }
-
-      return result;
-    }
-
-    console.log(num_format(1234567890));
-    
-  </script>
-</body>
+      console.log(num_format(123))
+    </script>
+  </body>
 </html>
