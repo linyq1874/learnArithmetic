@@ -13,6 +13,8 @@ Function.prototype.myCall = function(context = window, ...args) {
   delete context[fn]
 
   return result
+
+  // return this(...args)
 }
 
 const frog = {

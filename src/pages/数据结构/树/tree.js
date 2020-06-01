@@ -186,6 +186,7 @@ class Tree {
         current = stack.pop()
         result.push(current.val)
         last = current
+        // current 为null，跳过下一轮的 while(current)循环
         current = null
       } else {
         current = current.right
@@ -728,6 +729,7 @@ class Tree {
       }
       let right = true
       if (i < len - 1) {
+        // 除掉根节点
         right = this.VerifySequenceOfBST(seq.slice(i, len - 1))
       }
 

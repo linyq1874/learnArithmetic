@@ -84,6 +84,9 @@ class MyPromise {
   then(onFulled, onRejected) {
     /**
      * 参数不传的情况做判断: 给默认值,实现透传
+     * 返回值穿透以及错误穿透, 注意错误穿透用的是throw 而不是return，否则的话
+     * 这个then 返回的promise 状态将变成resolved 即接下来的then 中的 onFulled
+     * 会被调用, 然而我们想要调用的是onRejected
      * 如：Promise.resolve(4).then().catch().then(console.log)
      * 是方法则直接使用，不是则透传
      */

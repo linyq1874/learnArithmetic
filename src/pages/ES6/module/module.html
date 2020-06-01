@@ -8,13 +8,12 @@
   </head>
   <body>
     <script type="module">
-      // import { a } from './a.js'
-      import { a, b, c } from './b.js'
-      // import { c } from './c.js'
-
-      a()
-      b()
-      c()
+      import { Button, Link, Heading } from './components'
+      const body = document.querySelector('body')
+      // const headingDom = Heading(1)
+      // headingDom.innerHTML = 'hello'
+      const div = document.createElement('div')
+      body.appendChild(div)
     </script>
   </body>
 </html>

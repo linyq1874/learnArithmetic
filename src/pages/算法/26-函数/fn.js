@@ -92,3 +92,17 @@ function getCandidates2(candidates, target) {
 }
 
 console.log(getCandidates2([10, 1, 2, 7, 6, 1, 5], 8))
+
+const hello1 = function() {
+  setTimeout(() => {
+    console.log(this.name || 'ffff')
+  }, 0)
+}
+
+hello1.call({ name: 'ggg' })
+
+const hello2 = function() {
+  Promise.resolve().then(() => console.log(this.name || 'ppppp'))
+}
+
+hello2.call({ name: 'p2p22' })

@@ -11,6 +11,10 @@ Function.prototype.myBind = function(context, ...args1) {
 
     return fn.apply(context, args1.concat(args2))
   }
+  /**
+   * 绑定原型
+   * 让new this绑定不丢失
+   */
   F.prototype = this.prototype
   return F
 }
