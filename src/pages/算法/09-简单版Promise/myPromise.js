@@ -25,22 +25,31 @@ class MyPromise {
     this.onResolveCallback = []
     this.onRejectCallback = []
 
+    // 对于 resolve 函数来说，首先需要判断传入的值是否为 Promise 类型
+    // 为了保证函数执行顺序，需要将两个函数体代码使用 setTimeout 包裹起来
     const resolve = val => {
-      if (this.state === PENDING) {
-        this.state = RESOLVE
-        this.value = val
-
-        this.onResolveCallback.forEach(cb => cb(this.value))
+      if (val instanceof MyPromise) {
+        return val.then(resolve, reject)
       }
+      setTimeout(() => {
+        if (this.state === PENDING) {
+          this.state = RESOLVE
+          this.value = val
+
+          this.onResolveCallback.forEach(cb => cb(this.value))
+        }
+      }, 0)
     }
 
     const reject = err => {
-      if (this.state === PENDING) {
-        this.state = REJECTED
-        this.reason = err
+      setTimeout(() => {
+        if (this.state === PENDING) {
+          this.state = REJECTED
+          this.reason = err
 
-        this.onResolveCallback.forEach(cb => cb(this.reason))
-      }
+          this.onResolveCallback.forEach(cb => cb(this.reason))
+        }
+      }, 0)
     }
 
     try {
@@ -57,7 +66,7 @@ class MyPromise {
   `resolve`和`reject`实际上是`bridgePromise`的`executor`的两个实参，因为很难挂在其它的地方，所以一并传进来。
   相信各位一定可以对照标准把标准转换成代码，这里就只标出代码在标准中对应的位置，只在必要的地方做一些解释
 */
-  _resolvePromise(bridgePromise, x, resolve, reject) {
+  _resolvePromise (bridgePromise, x, resolve, reject) {
     if (x instanceof MyPromise) {
       // 拆解这个 promise ，直到返回值不为 promise 为止
       // 如果x的状态还没有确定，那么它是有可能被一个thenable决定最终状态和值的
@@ -81,7 +90,7 @@ class MyPromise {
     }
   }
 
-  then(onFulled, onRejected) {
+  then (onFulled, onRejected) {
     /**
      * 参数不传的情况做判断: 给默认值,实现透传
      * 返回值穿透以及错误穿透, 注意错误穿透用的是throw 而不是return，否则的话
@@ -95,8 +104,8 @@ class MyPromise {
       typeof onRejected === 'function'
         ? onRejected
         : error => {
-            throw error
-          }
+          throw error
+        }
 
     let bridgePromise
 
@@ -173,7 +182,7 @@ class MyPromise {
    * 这就是 Promise 的错误冒泡机制。
    * @param {*} onRejected
    */
-  catch(onRejected) {
+  catch (onRejected) {
     return this.then(null, onRejected)
   }
 }
@@ -242,5 +251,5 @@ Promise.resolve(4)
   .then({})
   .then(console.log)
 Promise.resolve(4)
-  .then(() => {})
+  .then(() => { })
   .then(console.log)
