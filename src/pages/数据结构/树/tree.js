@@ -11,11 +11,11 @@ class Tree {
     this.root = null
   }
 
-  addNode(val) {
+  addNode (val) {
     this.root = this._addNode(this.root, val)
   }
 
-  _addNode(node, val) {
+  _addNode (node, val) {
     if (!node) {
       return new Node(val)
     }
@@ -30,7 +30,7 @@ class Tree {
   }
 
   // 按照数组的顺序创建tree，遇见null则跳过
-  levelAddNode(nodes) {
+  levelAddNode (nodes) {
     const queen = []
     const len = nodes.length
     let i = 0
@@ -62,14 +62,14 @@ class Tree {
     return (this.root = root)
   }
 
-  prevTravel() {
+  prevTravel () {
     const result = this._prevTravel(this.root)
     console.log('prevTravel:', result)
     console.log('非递归')
     this.$prevTravel(this.root)
   }
 
-  _prevTravel(node, result = []) {
+  _prevTravel (node, result = []) {
     if (node) {
       // console.log(`${node.val} ->`)
       result.push(node.val)
@@ -87,7 +87,7 @@ class Tree {
    3. 节点出栈， 以右孩子为目标节点， 再依次执行1、 2、 3
    * @param {*} node
    */
-  $prevTravel(node) {
+  $prevTravel (node) {
     const result = []
     const stack = []
     let current = node
@@ -105,14 +105,14 @@ class Tree {
     console.log(result)
   }
 
-  midTravel() {
+  midTravel () {
     const result = this._midTravel(this.root)
     console.log('midTravel:', result)
     console.log('非递归')
     this.$midTravel(this.root)
   }
 
-  _midTravel(node, result = []) {
+  _midTravel (node, result = []) {
     if (node) {
       this._midTravel(node.left, result)
       // console.log(`${node.val} ->`)
@@ -130,7 +130,7 @@ class Tree {
    3. 以右孩子为目标节点， 再依次执行1、 2、 3
    * @param {*} node
    */
-  $midTravel(node) {
+  $midTravel (node) {
     const result = []
     const stack = []
     let current = node
@@ -149,14 +149,14 @@ class Tree {
     // return result
   }
 
-  nextTravel() {
+  nextTravel () {
     const result = this._nextTravel(this.root)
     console.log('nextTravel:', result)
     console.log('非递归')
     this.$nextTravel(this.root)
   }
 
-  _nextTravel(node, result = []) {
+  _nextTravel (node, result = []) {
     if (node) {
       this._nextTravel(node.left, result)
       this._nextTravel(node.right, result)
@@ -168,7 +168,7 @@ class Tree {
     return result
   }
 
-  $nextTravel(node) {
+  $nextTravel (node) {
     const stack = [],
       result = []
     let last = null,
@@ -197,7 +197,9 @@ class Tree {
     console.log(result)
   }
 
-  levelTravel() {
+
+
+  levelTravel () {
     let root = this.root,
       level = 0,
       queen = [],
@@ -222,7 +224,33 @@ class Tree {
 
     return result
   }
-  levelTravelReverse() {
+
+  levelTravel2 () {
+    let root = this.root,
+      queen = [],
+      result = [],
+      level = 0;
+
+    if (!root) return [];
+    queen.push(root);
+
+    while (queen.length) {
+      let size = queen.length;
+      result.push([]);
+      while (size--) {
+        const node = queen.shift();
+        result[level].push(node.val);
+
+        node.left && queen.push(node.left);
+        node.right && queen.push(node.right)
+      }
+
+      level++;
+    }
+
+    return result;
+  }
+  levelTravelReverse () {
     let root = this.root,
       level = 0,
       queen = [],
@@ -248,7 +276,7 @@ class Tree {
     return result
   }
 
-  leftView() {
+  leftView () {
     let root = this.root,
       result = [],
       queen = []
@@ -270,7 +298,7 @@ class Tree {
 
     return result
   }
-  rightView() {
+  rightView () {
     let root = this.root,
       result = [],
       queen = []
@@ -308,7 +336,7 @@ class Tree {
    * @param {number} y
    * @return {boolean}
    */
-  isCousins(x, y) {
+  isCousins (x, y) {
     const root = this.root
     // 当前节点和父节点
     const queue = [[root, null]]
@@ -334,19 +362,19 @@ class Tree {
   }
 
   // 最大深度也可以用层序遍历的level获取
-  maxDepth() {
+  maxDepth () {
     return this._maxDepth(this.root)
   }
 
-  _maxDepth(node) {
+  _maxDepth (node) {
     if (!node) return 0
     return Math.max(this._maxDepth(node.left), this._maxDepth(node.right)) + 1
   }
 
-  minDepth() {
+  minDepth () {
     return this._minDepth(this.root)
   }
-  _minDepth(node) {
+  _minDepth (node) {
     if (!node) return 0
     if (!node.left) return this._minDepth(node.right) + 1
     if (!node.right) return this._minDepth(node.left) + 1
@@ -355,7 +383,7 @@ class Tree {
   }
 
   // 镜像
-  reflection() {
+  reflection () {
     const root = this.root
 
     if (!root) return true
@@ -370,7 +398,7 @@ class Tree {
   }
 
   // 镜像 迭代版本
-  reflection2() {
+  reflection2 () {
     const queue = [],
       root = this.root
     if (!root) return true
@@ -395,7 +423,7 @@ class Tree {
     return true
   }
 
-  _reflection2(queue) {
+  _reflection2 (queue) {
     let left = 0,
       right = queue.length - 1
     while (left < right) {
@@ -416,7 +444,7 @@ class Tree {
     return true
   }
 
-  getMirror() {
+  getMirror () {
     const root = this.root
 
     // const help = node => {
@@ -434,7 +462,7 @@ class Tree {
     while (stack.length > 0) {
       let cur = stack.pop()
       if (cur === null) continue
-      ;[cur.left, cur.right] = [cur.right, cur.left]
+        ;[cur.left, cur.right] = [cur.right, cur.left]
       stack.push(cur.left)
       stack.push(cur.right)
     }
@@ -443,7 +471,7 @@ class Tree {
 
   // 根节点到子节点的所有路径
   // allPath: [ '3->1->0', '3->1->2', '3->5->4', '3->5->6->8->7' ]
-  allPath() {
+  allPath () {
     const root = this.root,
       path = [],
       result = []
@@ -479,7 +507,7 @@ class Tree {
    * !套用回溯算法的思路
    * @param {*} sum
    */
-  allSumPath(sum) {
+  allSumPath (sum) {
     const root = this.root,
       result = [],
       path = []
@@ -514,7 +542,7 @@ class Tree {
    * 和为某一值的所有路径，路径可以不经过根节点
    * @param {Number} sum
    */
-  pathSum(sum) {
+  pathSum (sum) {
     const root = this.root,
       result = [],
       path = []
@@ -548,7 +576,7 @@ class Tree {
   }
 
   // 最近公共祖先
-  commonAncestor(p, q) {
+  commonAncestor (p, q) {
     return this._commonAncestor(this.root, p, q).val
   }
 
@@ -558,7 +586,7 @@ class Tree {
    * 右孩子不包含 p 或者 q 就去找左孩子，
    * 剩下的情况就是左右孩子中都存在 p 或者 q, 那么此时直接返回这个节点。
    */
-  _commonAncestor(node, p, q) {
+  _commonAncestor (node, p, q) {
     // 相等说明公共祖先为其中某个相等的点
     if (!node || node.val === p || node.val === q) return node
 
@@ -589,7 +617,7 @@ class Tree {
    * 并通过返回值的方式自底向上把当前节点左右子树的最大高度传给父函数使用，
    * 使得每个节点只需访问一次即可。
    */
-  maxLength() {
+  maxLength () {
     const root = this.root
     if (!root) return 0
     let max = 0
@@ -626,7 +654,7 @@ class Tree {
 
       输出: 42 (15 + 20 + 7)
    */
-  maxPathSum() {
+  maxPathSum () {
     const root = this.root
     if (!root) return 0
 
@@ -657,7 +685,7 @@ class Tree {
    * 和前一个节点的值比较，如果大于前一个节点，则满足条件，
    * 否则不是二叉搜索树。
    */
-  isAVL() {
+  isAVL () {
     const root = this.root
     let prev = null
 
@@ -682,7 +710,7 @@ class Tree {
    * 将有序数组转化为高度平衡二叉搜索树
    * @param {Array} arr
    */
-  sortedArrayToBST(arr) {
+  sortedArrayToBST (arr) {
     const help = (left, right) => {
       if (left > right) return null
       if (left === right) return new Node(arr[left])
@@ -706,7 +734,7 @@ class Tree {
    * @param {Array} seq
    * @returns boolean
    */
-  VerifySequenceOfBST(seq) {
+  VerifySequenceOfBST (seq) {
     const len = seq.length
     if (seq && len) {
       const root = seq[len - 1]
@@ -745,7 +773,7 @@ class Tree {
    * @param {Array} prev
    * @param {Array} mid
    */
-  rebuild(prev, mid) {
+  rebuild (prev, mid) {
     const help = (prev, mid) => {
       if (!prev || !prev.length) return null
 
@@ -775,7 +803,7 @@ class Tree {
    * @param {*} prev
    * @param {*} mid
    */
-  getNextTravel(prev, mid) {
+  getNextTravel (prev, mid) {
     if (!prev || !prev.length) return []
     if (prev.length === 1) return prev
 
@@ -800,7 +828,7 @@ class Tree {
    * 左右子树有一个不是平衡的，或左右子树差值大于1，则整课树不平衡
    * 若左右子树平衡，返回当前树的深度（左右子树的深度最大值+1）
    */
-  isBalanceTree() {
+  isBalanceTree () {
     const root = this.root
 
     const help = node => {
@@ -840,6 +868,7 @@ tree.prevTravel()
 tree.midTravel()
 tree.nextTravel()
 console.log('levelTravel:', tree.levelTravel())
+console.log('levelTravel2:', tree.levelTravel2())
 console.log('levelTravelReverse:', tree.levelTravelReverse())
 console.log('leftView:', tree.leftView())
 console.log('rightView:', tree.rightView())

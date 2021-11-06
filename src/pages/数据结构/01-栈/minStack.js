@@ -16,7 +16,7 @@ MinStack.prototype.push = function(x) {
     this.minStack.push(x)
   } else {
     const min = this.getMin()
-    this.minStack.push(x < min ? x : min)
+    this.minStack.push(Math.min(x, min))
   }
 
   this.stack.push(x)
@@ -35,7 +35,7 @@ MinStack.prototype.pop = function() {
 /**
  * @return {number}
  */
-MinStack.prototype.top = function() {
+MinStack.prototype.peek = function() {
   console.log('top...', this.top)
   return this.stack[this.top]
 }
@@ -58,7 +58,15 @@ MinStack.prototype.getMin = function() {
 
 const stack = new MinStack()
 
-stack.push(2)
-// stack.pop()
-console.log(stack.top())
+function getRandom(r = 10) {
+  return Math.random() * r >> 0
+}
+
+for(let i = 0; i < 10; i ++) {
+  stack.push(getRandom())
+}
+console.log('stack', stack);
+const r = stack.peek();
+
+console.log(r)
 console.log(stack.getMin())
