@@ -67,3 +67,26 @@ const otherCompose = (...func) => (...args) => {
 const g5 = otherCompose(console.log, addSymbol, addSymbol, toUpper)
 
 g5('hello world')
+
+
+
+
+const compose6 = (...args) => {
+  let start = args.length - 1;
+
+  return function() {
+    let result = args[start].apply(this, arguments);
+
+    while(start--) {
+      result = args[start].call(this, result)
+    }
+
+    return result;
+  }
+}
+
+
+const g6 = compose6(console.log, addSymbol, addSymbol, toUpper);
+console.log('-----');
+
+g6('hello world')

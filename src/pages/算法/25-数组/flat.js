@@ -13,7 +13,7 @@ console.log('flatten2', flatten2([...arr]))
 
 const flatten3 = arr => {
   const result = []
-  const fn = function(target, arr) {
+  const fn = function (target, arr) {
     arr.forEach(item => {
       if (Array.isArray(item)) {
         fn(target, item)
@@ -47,7 +47,15 @@ console.log('flatten4', flatten4([...arr]))
 const depthFlatten = (arr, depth = 1) => arr.reduce((prev, cur) => prev.concat(Array.isArray(cur) && depth > 1 ? depthFlatten(cur, depth - 1) : cur), [])
 
 console.log('depthFlatten', depthFlatten(arr))
+console.log('depthFlatten', depthFlatten(arr, 2))
 
 const depthFlatten2 = (arr, depth = 1) => [].concat(...arr.map(v => (Array.isArray(v) && depth > 1 ? depthFlatten2(v, depth - 1) : v)))
 
 console.log('depthFlatten2', depthFlatten2(arr))
+
+
+const flatten5 = arr => arr.reduce((prev, cur) => {
+  return prev.concat(Array.isArray(cur) ? flatten5(cur) : cur)
+}, [])
+
+console.log('flatten5', flatten5(arr));

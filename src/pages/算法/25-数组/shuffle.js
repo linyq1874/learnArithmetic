@@ -12,6 +12,7 @@ const shuffle = arr => {
   return arr
 }
 
-const arr = getArr(5)
+// const arr = getArr(5)
+arr = [95, 52, 33, 50, 11]
 console.log('before:', arr)
 console.log('after:', shuffle([...arr]))

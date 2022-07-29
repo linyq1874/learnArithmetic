@@ -1,3 +1,5 @@
+// call 和 apply的本质是采用隐式绑定，把方法this挂在对象context[fn]上，然后执行该方法
+
 Function.prototype.myCall = function(context = window, ...args) {
   if (this === Function.prototype) {
     console.log('err')

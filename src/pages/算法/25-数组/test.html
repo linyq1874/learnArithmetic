@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        const entries = [
+                {
+                    province: 'guangdong',
+                    city: 'guangzhou',
+                    district: 'tianhe'
+                },
+                {
+                    province: 'guangdong',
+                    city: 'shenzhen',
+                    district: 'nanshan',
+                },
+                {
+                    province: 'guangdong',
+                    city: 'shenzhen',
+                    district: 'luohu',
+                },
+                {
+                    province: 'beijing',
+                    city: 'beijing',
+                    district: 'changping',
+                },
+            ];
+            const levels = ['province', 'city', 'district'];
+
+            function solution(tableData, keys) {
+                const hashTable = {}
+                const res = []
+                for (let i = 0; i < tableData.length; i++) {
+                    let arr = res
+                    let cur = hashTable
+                    for (let j = 0; j < keys.length; j++) {
+                        const key = keys[j]
+                        const filed = tableData[i][key]
+
+                        if (!cur[filed]) {
+                            const pusher = {
+                                value: filed
+                            }
+                            let tmp
+                            if (j !== (keys.length - 1)) {
+                                tmp = []
+                                pusher.children = tmp
+                            }
+                            cur[filed] = { pos: arr.push(pusher) - 1 }
+
+                            cur = cur[filed]
+
+                            arr = tmp
+
+                        } else {
+
+                            cur = cur[filed]
+                            arr = arr[cur.pos].children
+
+
+                        }
+                    }
+                }
+                return res
+            }
+            console.log(solution(entries, levels));
+
+    </script>
+</body>
+</html>

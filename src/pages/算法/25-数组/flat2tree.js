@@ -9,12 +9,12 @@ const nest = (items, id = null, parent = 'parent_id') =>
       children: nest(items, item.id)
     }))
 
-const comments = [{ id: 1, parent_id: null }, { id: 2, parent_id: 1 }, { id: 3, parent_id: 1 }, { id: 4, parent_id: 2 }, { id: 5, parent_id: 4 }]
+const comments = [{ id: 6, parent_id: null }, { id: 1, parent_id: null }, { id: 2, parent_id: 1 }, { id: 3, parent_id: 1 }, { id: 4, parent_id: 2 }, { id: 5, parent_id: 4 }]
 
 console.log('nest', JSON.stringify(nest(comments), null, 2))
 
 // 非递归
-function flat2tree(nodes, config = { id: 'id', pid: 'pid', children: 'children' }) {
+function flat2tree (nodes, config = { id: 'id', pid: 'pid', children: 'children' }) {
   if (!Array.isArray(nodes)) {
     console.error('第一个参数必须为数组！！！')
     return
@@ -32,8 +32,7 @@ function flat2tree(nodes, config = { id: 'id', pid: 'pid', children: 'children' 
       // pid 对应不上 id 的点，为根节点，可以有多个
       const parent = idMap[v[pid]]
       if (parent) {
-        !parent[children] && (parent[children] = [])
-        parent[children].push(v)
+        (parent[children] || (parent[children] = [])).push(v)
       } else {
         jsonTree.push(v)
       }

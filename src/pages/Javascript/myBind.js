@@ -26,9 +26,11 @@ function Animal(name, color) {
 Animal.prototype.say = function() {
   return `I'm a ${this.color} ${this.name}`
 }
-const Cat = Animal.myBind(null, 'cat')
-const cat = new Cat('white')
 console.log(cat.say())
+console.log('cat instanceof Cat', cat instanceof Cat);
+console.log('cat instanceof Animal', cat instanceof Animal);
+
+
 if (cat.say() === "I'm a white cat" && cat instanceof Cat && cat instanceof Animal) {
   console.log('success')
 }
