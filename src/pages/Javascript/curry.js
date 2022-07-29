@@ -75,16 +75,26 @@
 //   }
 // }
 
-function myCurrying(fn, ...args) {
-  if (args.length >= fn.length) return fn.apply(null, args)
+function myCurrying (fn, ...args) {
+  if (args.length >= fn.length) return fn(...args)
   return (...args2) => myCurrying(fn, ...args, ...args2)
 }
 
-const add = myCurrying(function(a, b, c) {
+const add = myCurrying(function (a, b, c) {
   return a + b + c
+})
+
+const log = myCurrying(function (a, b, c) {
+  console.log([a, b, c]);
 })
 
 console.log('1:', add(1)(2)(3))
 console.log('2:', add(1, 2)(3))
 console.log('3:', add(1)(2, 3))
 console.log('4:', add(1, 2, 3))
+
+
+log("a", "b", "c") // ["a", "b", "c"]
+log("a", "b")("c") // ["a", "b", "c"]
+log("a")("b")("c") // ["a", "b", "c"]
+log("a")("b", "c") // ["a", "b", "c"]
